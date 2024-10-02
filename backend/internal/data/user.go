@@ -26,11 +26,7 @@ type User struct {
 	Updated_at time.Time `db:"updated_at" json:"updated_at"`
 }
 
-<<<<<<< HEAD
 type UserDB struct {
-=======
-type userDB struct {
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	db *sqlx.DB
 }
 
@@ -56,21 +52,13 @@ func ValidatingUser(v *validator.Validator, user *User, fields ...string) {
 		case "password":
 
 			if user.Password != "" {
-<<<<<<< HEAD
-=======
-				// Example: Validate password strength, e.g., minimum length
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 				v.Check(len(user.Password) >= 8, "password", "Password too short")
 			}
 
 		}
 	}
 }
-<<<<<<< HEAD
 func (u *UserDB) GetUsers(sortColumn, sortDirection string, page, pageSize int, searchTerm string) (*[]User, error) {
-=======
-func (u *userDB) GetUsers(sortColumn, sortDirection string, page, pageSize int, searchTerm string) (*[]User, error) {
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	var users []User
 
 	// Construct query builder
@@ -110,7 +98,6 @@ func (u *userDB) GetUsers(sortColumn, sortDirection string, page, pageSize int, 
 
 	return &users, nil
 }
-<<<<<<< HEAD
 func (u *UserDB) GetUser(id uuid.UUID) (*User, error) {
 	var user User
 
@@ -127,32 +114,12 @@ func (u *UserDB) GetUser(id uuid.UUID) (*User, error) {
 			return nil, ErrRecordNotFound // Return custom error if no record is found
 		}
 		return nil, fmt.Errorf("error scanning result: %w", err)
-=======
-
-func (u *userDB) GetUser(id uuid.UUID) (*User, error) {
-	var user User
-	query, agrs, err := QB.Select(strings.Join(user_columns, ",")).From("users").Where(squirrel.Eq{"id": id}).ToSql()
-	if err != nil {
-		return nil, err
-	}
-	err = u.db.QueryRowx(query, agrs...).StructScan(&user)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, ErrRecordNotFound
-		}
-
-		return nil, err
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	}
 
 	return &user, nil
 }
-<<<<<<< HEAD
 
 func (u *UserDB) Insert(user *User) error {
-=======
-func (u *userDB) Insert(user *User) error {
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	err := u.checkEmailExists(user.Email)
 	if err != nil {
 		if err == ErrDuplicatedKey {
@@ -184,11 +151,7 @@ func (u *userDB) Insert(user *User) error {
 
 	return nil
 }
-<<<<<<< HEAD
 func (u *UserDB) DeleteUser(id uuid.UUID) (*User, error) {
-=======
-func (u *userDB) DeleteUser(id uuid.UUID) (*User, error) {
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 
 	var user User
 	query, args, err := QB.Delete("users").Where(squirrel.Eq{"id": id}).Suffix(fmt.Sprintf("RETURNING %s", strings.Join(user_columns, ", "))).ToSql()
@@ -223,11 +186,7 @@ func (u *userDB) DeleteUser(id uuid.UUID) (*User, error) {
 	}
 	return &user, nil
 }
-<<<<<<< HEAD
 func (u *UserDB) Update(user *User) error {
-=======
-func (u *userDB) Update(user *User) error {
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	originalUser, err := u.GetUser(user.ID)
 	if err != nil {
 		return err
@@ -272,11 +231,7 @@ func (u *userDB) Update(user *User) error {
 	return nil
 
 }
-<<<<<<< HEAD
 func (u *UserDB) GetUserByEmail(email string) (*User, error) {
-=======
-func (u *userDB) GetUserByEmail(email string) (*User, error) {
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	// Construct SQL query
 	var user User
 	query, args, err := QB.Select(strings.Join(user_columns, ", ")).From("users").Where(squirrel.Eq{"email": email}).ToSql()
@@ -288,11 +243,7 @@ func (u *userDB) GetUserByEmail(email string) (*User, error) {
 	if err != nil {
 		if err == sql.ErrNoRows {
 			// No record found
-<<<<<<< HEAD
 			return nil, ErrUserNotFound
-=======
-			return nil, ErrRecordNotFound
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		}
 		// Some other error occurred
 		return nil, fmt.Errorf("failed to execute query: %v", err)
@@ -301,11 +252,7 @@ func (u *userDB) GetUserByEmail(email string) (*User, error) {
 	// Email exists
 	return &user, nil
 }
-<<<<<<< HEAD
 func (u *UserDB) checkEmailExists(email string) error {
-=======
-func (u *userDB) checkEmailExists(email string) error {
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	query, args, err := QB.Select("1").From("users").Where(squirrel.Eq{"email": email}).ToSql()
 	if err != nil {
 		return fmt.Errorf("failed to build query: %v", err)

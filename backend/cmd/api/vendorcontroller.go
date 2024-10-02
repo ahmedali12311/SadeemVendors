@@ -65,7 +65,6 @@ func (app *application) IndexVendorHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-<<<<<<< HEAD
 	// Retrieve user role from context
 	isAdmin, ok := r.Context().Value(UserRoleKey).(string)
 	if !ok {
@@ -99,23 +98,12 @@ func (app *application) IndexVendorHandler(w http.ResponseWriter, r *http.Reques
 		}
 		count = totalCount
 		vendors = *vendorsPtr
-=======
-	// Fetch vendors with pagination
-	vendors, totalCount, err := app.Model.VendorDB.GetVendors(filters)
-	if err != nil {
-		app.handleRetrievalError(w, r, err)
-		return
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	}
 
 	// Prepare response
 	response := utils.Envelope{
 		"Vendors":    vendors,
-<<<<<<< HEAD
 		"TotalCount": count,
-=======
-		"TotalCount": totalCount,
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		"Page":       page,
 		"PageSize":   pageSize,
 	}
@@ -123,7 +111,6 @@ func (app *application) IndexVendorHandler(w http.ResponseWriter, r *http.Reques
 	utils.SendJSONResponse(w, http.StatusOK, response)
 }
 
-<<<<<<< HEAD
 func (app *application) CreateVendor(w http.ResponseWriter, r *http.Request) {
 	var vendor data.Vendor
 	var newImage *string
@@ -133,34 +120,6 @@ func (app *application) CreateVendor(w http.ResponseWriter, r *http.Request) {
 	vendor.Description = r.FormValue("description")
 
 	// Handle file upload
-=======
-func (app *application) ShowVendorHandler(w http.ResponseWriter, r *http.Request) {
-	idStr := r.PathValue("id")
-	id, err := uuid.Parse(idStr)
-	if err != nil {
-		app.notFoundResponse(w, r)
-		return
-	}
-	vendor, err := app.Model.VendorDB.GetVendor(id)
-	if err != nil {
-		switch {
-		case errors.Is(err, sql.ErrNoRows):
-			app.errorResponse(w, r, http.StatusNotFound, fmt.Sprintf("Vendor with ID %d was not found", id))
-			return
-		default:
-			app.serverErrorResponse(w, r, err)
-		}
-	}
-	utils.SendJSONResponse(w, http.StatusOK, utils.Envelope{"vendor": vendor})
-}
-
-func (app *application) CreateVendor(w http.ResponseWriter, r *http.Request) {
-	var vendor = data.Vendor{
-		Name:        r.FormValue("name"),
-		Description: r.FormValue("description"),
-	}
-	var newImage *string
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	file, fileHeader, err := r.FormFile("img")
 	if err != nil && err != http.ErrMissingFile {
 		app.badRequestResponse(w, r, errors.New("invalid file"))
@@ -171,16 +130,11 @@ func (app *application) CreateVendor(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			app.errorResponse(w, r, http.StatusInternalServerError, "Error saving image")
 			return
-<<<<<<< HEAD
-=======
-
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		}
 		vendor.Img = &imageName
 		newImage = &imageName
 	}
 
-<<<<<<< HEAD
 	if r.FormValue("subscriptionDays") != "" {
 		// Parse subscription days
 		subscriptionDaysStr := r.FormValue("subscriptionDays")
@@ -211,33 +165,14 @@ func (app *application) CreateVendor(w http.ResponseWriter, r *http.Request) {
 		if newImage != nil {
 			utils.DeleteImageFile(*newImage)
 		}
-=======
-	v := validator.New()
-	data.ValidatingVendor(v, &vendor)
-	if !v.Valid() {
-		app.failedValidationResponse(w, r, v.Errors)
-		return
-	}
-	ven, err := app.Model.VendorDB.InsertVendor(&vendor)
-	if err != nil {
-		utils.DeleteImageFile(*newImage)
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		app.serverErrorResponse(w, r, err)
 		return
 	}
 
-<<<<<<< HEAD
 	// Send the response
 	utils.SendJSONResponse(w, http.StatusCreated, utils.Envelope{"vendor created successfully ": vendor.ID})
 }
 func (app *application) UpdateVendorHandler(w http.ResponseWriter, r *http.Request) {
-=======
-	utils.SendJSONResponse(w, http.StatusCreated, utils.Envelope{"vendor": ven})
-}
-
-func (app *application) UpdateVendorHandler(w http.ResponseWriter, r *http.Request) {
-	var oldImg *string
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	idStr := r.PathValue("id")
 	id, err := uuid.Parse(idStr)
 	if err != nil {
@@ -245,17 +180,12 @@ func (app *application) UpdateVendorHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-<<<<<<< HEAD
 	// Retrieve the existing vendor
 	vendor, err := app.Model.VendorDB.GetVendor(id, true) // Adjusted to handle three return values
-=======
-	vendor, err := app.Model.VendorDB.GetVendor(id)
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	if err != nil {
 		app.handleRetrievalError(w, r, err)
 		return
 	}
-<<<<<<< HEAD
 	if vendor == nil {
 		app.notFoundResponse(w, r)
 		return
@@ -266,8 +196,6 @@ func (app *application) UpdateVendorHandler(w http.ResponseWriter, r *http.Reque
 		*vendor.Img = strings.TrimPrefix(*vendor.Img, data.Domain+"/")
 		oldImg = vendor.Img
 	}
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 
 	if r.FormValue("name") != "" {
 		vendor.Name = r.FormValue("name")
@@ -275,7 +203,6 @@ func (app *application) UpdateVendorHandler(w http.ResponseWriter, r *http.Reque
 	if r.FormValue("description") != "" {
 		vendor.Description = r.FormValue("description")
 	}
-<<<<<<< HEAD
 	if r.FormValue("subscriptionDays") != "" {
 		vendor.SubscriptionDays, err = strconv.Atoi(r.FormValue("subscriptionDays"))
 		if err != nil {
@@ -304,39 +231,6 @@ func (app *application) UpdateVendorHandler(w http.ResponseWriter, r *http.Reque
 		return
 	}
 
-=======
-	if vendor.Img != nil {
-		*vendor.Img = strings.TrimPrefix(*vendor.Img, data.Domain+"/")
-		oldImg = vendor.Img
-
-	}
-	file, fileheader, err := r.FormFile("img")
-	if vendor.Img != nil {
-		*vendor.Img = strings.TrimPrefix(*vendor.Img, data.Domain+"/")
-		oldImg = vendor.Img
-
-	}
-	if err != nil && err != http.ErrMissingFile {
-		app.errorResponse(w, r, http.StatusBadRequest, "Invalid file")
-		return
-	} else if err == nil {
-		file.Close()
-		newimg, err := utils.SaveImageFile(file, "vendors", fileheader.Filename)
-		if err != nil {
-			app.errorResponse(w, r, http.StatusBadRequest, "error while saving image")
-			return
-
-		}
-		vendor.Img = &newimg
-
-	}
-	v := validator.New()
-	data.ValidatingVendor(v, vendor)
-	if !v.Valid() {
-		app.failedValidationResponse(w, r, v.Errors)
-		return
-	}
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	err = app.Model.VendorDB.UpdateVendor(vendor)
 	if err != nil {
 		if vendor.Img != nil && oldImg != nil {
@@ -345,7 +239,6 @@ func (app *application) UpdateVendorHandler(w http.ResponseWriter, r *http.Reque
 		app.serverErrorResponse(w, r, err)
 		return
 	}
-<<<<<<< HEAD
 
 	if oldImg != nil && vendor.Img != nil && *oldImg != *vendor.Img {
 		utils.DeleteImageFile(*oldImg)
@@ -354,13 +247,6 @@ func (app *application) UpdateVendorHandler(w http.ResponseWriter, r *http.Reque
 	utils.SendJSONResponse(w, http.StatusOK, utils.Envelope{"vendor": vendor})
 }
 
-=======
-	if oldImg != nil && vendor.Img != nil && *oldImg != *vendor.Img {
-		utils.DeleteImageFile(*oldImg)
-	}
-	utils.SendJSONResponse(w, http.StatusOK, utils.Envelope{"vendor": vendor})
-}
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 func (app *application) DeleteVendorHandler(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	iduu, err := uuid.Parse(id)
@@ -381,7 +267,6 @@ func (app *application) DeleteVendorHandler(w http.ResponseWriter, r *http.Reque
 	}
 	utils.SendJSONResponse(w, http.StatusOK, utils.Envelope{"deleted vendor": vendor})
 }
-<<<<<<< HEAD
 func (app *application) GetUserVendors(w http.ResponseWriter, r *http.Request) {
 	userUUID, err := uuid.Parse(r.PathValue("id"))
 	if err != nil {
@@ -444,5 +329,3 @@ func (app *application) GetVendorTablesHandler(w http.ResponseWriter, r *http.Re
 
 	utils.SendJSONResponse(w, http.StatusOK, utils.Envelope{"tables": tables})
 }
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

@@ -1,10 +1,7 @@
 package data
 
 import (
-<<<<<<< HEAD
 	"context"
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	"database/sql"
 	"fmt"
 	"os"
@@ -20,7 +17,6 @@ import (
 )
 
 type Vendor struct {
-<<<<<<< HEAD
 	ID               uuid.UUID `db:"id" json:"id"`
 	Name             string    `db:"name" json:"name"`
 	Img              *string   `db:"img" json:"img"`
@@ -30,14 +26,6 @@ type Vendor struct {
 	SubscriptionEnd  time.Time `db:"subscription_end" json:"subscription_end"`
 	SubscriptionDays int       `db:"subscription_days" json:"-"`
 	IsVisible        bool      `db:"is_visible" json:"is_visible"`
-=======
-	ID          uuid.UUID `db:"id" json:"id"`
-	Name        string    `db:"name" json:"name"`
-	Img         *string   `db:"img" json:"img"`
-	Description string    `db:"description" json:"description"`
-	CreatedAt   time.Time `db:"created_at" json:"created_at"`
-	UpdatedAt   time.Time `db:"updated_at" json:"updated_at"`
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 
 type VendorDB struct {
@@ -56,7 +44,6 @@ func ValidatingVendor(v *validator.Validator, vendor *Vendor) {
 		v.Check(len(vendor.Description) <= 60, "description", "description can't be larger than 60 letters ")
 
 	}
-<<<<<<< HEAD
 	if vendor.SubscriptionDays >= 0 {
 		v.Check(vendor.SubscriptionDays <= 1000, "subscription", "sub days must be less than 1000")
 		v.Check(vendor.SubscriptionDays > 0, "subscription", "must be more then 0 days")
@@ -79,22 +66,6 @@ func (v *VendorDB) InsertVendor(vendor *Vendor) error {
 	}
 
 	return nil
-=======
-
-}
-func (v *VendorDB) InsertVendor(vendor *Vendor) (*Vendor, error) {
-	query, args, err := QB.Insert("vendors").Columns("name", "description", "img").
-		Values(vendor.Name, vendor.Description, vendor.Img).
-		Suffix(fmt.Sprintf("RETURNING %s", fmt.Sprint(strings.Join(vendors_columns, ",")))).ToSql()
-	if err != nil {
-		return nil, err
-	}
-	err = v.db.QueryRowx(query, args...).StructScan(vendor)
-	if err != nil {
-		return nil, fmt.Errorf("error while inserting vendor : %v", err)
-	}
-	return vendor, nil
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 
 func (v *VendorDB) DeleteVendor(id uuid.UUID) (*Vendor, error) {
@@ -129,7 +100,6 @@ func (v *VendorDB) DeleteVendor(id uuid.UUID) (*Vendor, error) {
 	}
 	return &vendor, nil
 }
-<<<<<<< HEAD
 func (v *VendorDB) UpdateVendor(vendor *Vendor) error {
 	var newSubscriptionEnd time.Time
 	if vendor.SubscriptionEnd.After(time.Now()) {
@@ -155,20 +125,10 @@ func (v *VendorDB) UpdateVendor(vendor *Vendor) error {
 	}
 
 	// Execute the query
-=======
-
-func (v *VendorDB) UpdateVendor(vendor *Vendor) error {
-	query, args, err := QB.Update("vendors").
-		Set("name", vendor.Name).Set("img", vendor.Img).Set("description", vendor.Description).Set("updated_at", time.Now()).Where(squirrel.Eq{"id": vendor.ID}).Suffix(fmt.Sprintf("RETURNING %s", strings.Join(vendors_columns, ","))).ToSql()
-	if err != nil {
-		return err
-	}
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	err = v.db.QueryRowx(query, args...).StructScan(vendor)
 	if err != nil {
 		return fmt.Errorf("UpdateVendor: %v", err)
 	}
-<<<<<<< HEAD
 
 	return nil
 }
@@ -184,31 +144,6 @@ func (v *VendorDB) GetVendors(filters utils.Filters, isVisible bool) (*[]Vendor,
 		queryBuilder = queryBuilder.Where(squirrel.Eq{"is_visible": true})
 	}
 
-=======
-	return nil
-}
-func (v *VendorDB) GetVendor(id uuid.UUID) (*Vendor, error) {
-	query, args, err := QB.Select(strings.Join(vendors_columns, ",")).From("vendors").Where(squirrel.Eq{"id": id}).ToSql()
-	if err != nil {
-		return nil, err
-	}
-	var vendor Vendor
-	err = v.db.QueryRowx(query, args...).StructScan(&vendor)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, ErrRecordNotFound // or handle as not found
-		}
-		return &vendor, fmt.Errorf("GetVendor: %v", err)
-	}
-	return &vendor, nil
-}
-func (v *VendorDB) GetVendors(filters utils.Filters) (*[]Vendor, int, error) {
-	var vendors []Vendor
-	offset := (filters.Page - 1) * filters.PageSize
-
-	queryBuilder := QB.Select(strings.Join(vendors_columns, ",")).From("vendors")
-
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	// Apply search filter
 	if filters.Search != "" {
 		searchTerm := "%" + filters.Search + "%"
@@ -225,10 +160,6 @@ func (v *VendorDB) GetVendors(filters utils.Filters) (*[]Vendor, int, error) {
 		queryBuilder = queryBuilder.OrderBy("name DESC")
 	default:
 		queryBuilder = queryBuilder.OrderBy("created_at DESC")
-<<<<<<< HEAD
-=======
-
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	}
 
 	// Apply pagination
@@ -247,12 +178,8 @@ func (v *VendorDB) GetVendors(filters utils.Filters) (*[]Vendor, int, error) {
 
 	// Get the total number of vendors
 	var totalVendorsCount int
-<<<<<<< HEAD
 	countQuery, _, err := QB.Select("COUNT(*)").From("vendors").
 		Where("subscription_end >= CURRENT_TIMESTAMP").ToSql()
-=======
-	countQuery, _, err := QB.Select("COUNT(*)").From("vendors").ToSql()
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	if err != nil {
 		return nil, 0, err
 	}
@@ -264,7 +191,6 @@ func (v *VendorDB) GetVendors(filters utils.Filters) (*[]Vendor, int, error) {
 	return &vendors, totalVendorsCount, nil
 }
 
-<<<<<<< HEAD
 func (v *VendorDB) GetVendor(id uuid.UUID, isVisible bool) (*Vendor, error) {
 	var vendor Vendor
 	queryBuilder := QB.Select(strings.Join(vendors_columns, ",")).From("vendors").Where(squirrel.Eq{"id": id})
@@ -315,24 +241,3 @@ func (v *VendorDB) GetUserVendors(ctx context.Context, userID uuid.UUID) ([]Vend
 	}
 	return vendors, nil
 }
-=======
-/*
-	func (v *VendorDB) GetVendors() (*[]Vendor, error) {
-		var vendors []Vendor
-		query, args, err := QB.Select(strings.Join(vendors_columns, ",")).From("vendors").ToSql()
-		if err != nil {
-			return nil, err
-		}
-		err = v.db.Select(&vendors, query, args...)
-		if err != nil {
-			if err == sql.ErrNoRows {
-				return nil, ErrRecordNotFound
-			}
-
-			return nil, err
-		}
-
-		return &vendors, nil
-	}
-*/
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

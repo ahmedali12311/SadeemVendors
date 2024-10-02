@@ -19,7 +19,6 @@ CREATE TABLE orders (
         REFERENCES users (id)
         ON DELETE CASCADE
 );
-<<<<<<< HEAD
 ALTER TABLE orders
 ADD COLUMN description TEXT DEFAULT NULL;
 
@@ -38,5 +37,3 @@ CREATE TRIGGER delete_completed_order_trigger
 AFTER UPDATE OF status ON orders
 FOR EACH ROW
 EXECUTE PROCEDURE delete_completed_order_trigger();
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

@@ -51,10 +51,6 @@ func (db *TableDB) GetTable(ctx context.Context, id uuid.UUID) (*Table, error) {
 		return nil, err
 	}
 	err = db.DB.QueryRowxContext(ctx, query, args...).StructScan(&table)
-<<<<<<< HEAD
-
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, ErrRecordNotFound
@@ -66,10 +62,6 @@ func (db *TableDB) GetTable(ctx context.Context, id uuid.UUID) (*Table, error) {
 
 // Insert inserts a new table into the database.
 func (db *TableDB) Insert(ctx context.Context, table *Table) error {
-<<<<<<< HEAD
-=======
-
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	query, args, err := QB.
 		Insert("tables").
 		Columns("name", "vendor_id", "customer_id", "is_available", "is_needs_service").
@@ -132,7 +124,6 @@ func (db *TableDB) Update(ctx context.Context, table *Table) error {
 	}
 	return nil
 }
-<<<<<<< HEAD
 
 func (db *TableDB) CountTablesForVendor(ctx context.Context, vendorID uuid.UUID) (int, error) {
 	var count int
@@ -272,5 +263,3 @@ func (db *TableDB) GetCustomertable(ctx context.Context, customerid uuid.UUID) (
 	}
 	return &table, nil
 }
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

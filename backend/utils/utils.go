@@ -8,7 +8,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-<<<<<<< HEAD
 	"strconv"
 	"strings"
 	"time"
@@ -16,23 +15,14 @@ import (
 	"github.com/Masterminds/squirrel"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/jmoiron/sqlx"
-=======
-	"strings"
-	"time"
-
-	"github.com/dgrijalva/jwt-go"
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	"golang.org/x/crypto/bcrypt"
 	"golang.org/x/exp/rand"
 )
 
 type Envelope map[string]interface{}
 
-<<<<<<< HEAD
 var QB = squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar)
 
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 var (
 	ErrInvalidToken  = errors.New("invalid token")
 	ErrExpiredToken  = errors.New("token has expired")
@@ -113,7 +103,6 @@ func DeleteImageFile(filePath string) error {
 	return nil
 }
 
-<<<<<<< HEAD
 // for converting string to float
 func NormalizeFloatInput(input string) string {
 	if strings.Contains(input, ".") {
@@ -125,8 +114,6 @@ func NormalizeFloatInput(input string) string {
 	return input + ".0"
 }
 
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 var jwtSecret = []byte("ahmedpa55word")
 
 func GenerateToken(userID, userRole string) (string, error) {
@@ -143,7 +130,6 @@ func GenerateToken(userID, userRole string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-<<<<<<< HEAD
 
 	return tokenString, nil
 }
@@ -157,11 +143,6 @@ func SetTokenCookie(w http.ResponseWriter, token string) {
 		Path:     "/",
 	})
 }
-=======
-	return tokenString, nil
-}
-
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 func ValidateToken(tokenString string) (*jwt.Token, error) {
 	segments := strings.Split(tokenString, ".")
 	if len(segments) != 3 {
@@ -180,7 +161,6 @@ func CheckPassword(storedHash, password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(storedHash), []byte(password))
 	return err == nil
 }
-<<<<<<< HEAD
 
 // ParseBoolOrDefault parses a string into a boolean, or returns a default value if parsing fails.
 func ParseBoolOrDefault(value string, defaultValue bool) (bool, error) {
@@ -266,5 +246,3 @@ func BuildQuery(db *sqlx.DB, table string, columns []string, dest interface{}, f
 
 	return nil
 }
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

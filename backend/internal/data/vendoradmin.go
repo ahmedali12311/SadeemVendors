@@ -16,14 +16,11 @@ type VendorAdmin struct {
 	UserID   uuid.UUID `db:"user_id" json:"user_id"`
 	VendorID uuid.UUID `db:"vendor_id" json:"vendor_id"`
 }
-<<<<<<< HEAD
 type VendorAdminUser struct {
 	UserID   uuid.UUID `db:"user_id" json:"user_id"`
 	VendorID uuid.UUID `db:"vendor_id" json:"vendor_id"`
 	Email    string    `db:"email"      json:"email"`
 }
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 
 // VendorAdminDB wraps a sqlx.DB connection pool for vendor admins.
 type VendorAdminDB struct {
@@ -45,14 +42,10 @@ func (v *VendorAdminDB) InsertVendorAdmin(ctx context.Context, vendor VendorAdmi
 		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23505" {
 			return nil, ErrDuplicatedRole
 		}
-<<<<<<< HEAD
 		if pqErr, ok := err.(*pq.Error); ok && pqErr.Code == "23503" {
 			return nil, ErrForeignKeyViolation
 		}
 		return nil, err
-=======
-		return nil, fmt.Errorf("error while inserting vendor admin: %v", err)
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	}
 	return &vendor, nil
 }
@@ -70,10 +63,7 @@ func (v *VendorAdminDB) GetVendorAdmin(ctx context.Context, userID, vendorID uui
 
 	err = v.db.GetContext(ctx, &vendorAdmin, query, args...)
 	if err != nil {
-<<<<<<< HEAD
 
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		if err == sql.ErrNoRows {
 			return nil, ErrRecordNotFound
 		}
@@ -81,42 +71,25 @@ func (v *VendorAdminDB) GetVendorAdmin(ctx context.Context, userID, vendorID uui
 	}
 	return &vendorAdmin, nil
 }
-<<<<<<< HEAD
 func (v *VendorAdminDB) GetVendorAdmins(ctx context.Context, vendorID uuid.UUID) ([]VendorAdminUser, error) {
 	vendorinfo := []VendorAdminUser{}
 	query, args, err := QB.Select("vendor_admins.user_id, vendor_admins.vendor_id, users.email").
 		From("vendor_admins").
 		Join("users ON vendor_admins.user_id = users.id").
 		Where(squirrel.Eq{"vendor_admins.vendor_id": vendorID}).
-=======
-
-func (v *VendorAdminDB) GetVendorAdmins(ctx context.Context, userIDRole, vendorID uuid.UUID) ([]VendorAdmin, error) {
-	var vendorAdmins []VendorAdmin
-	query, args, err := QB.Select("user_id, vendor_id").
-		From("vendor_admins").
-		Where(squirrel.Eq{"user_id": userIDRole, "vendor_id": vendorID}).
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		ToSql()
 	if err != nil {
 		return nil, err
 	}
 
-<<<<<<< HEAD
 	err = v.db.SelectContext(ctx, &vendorinfo, query, args...)
-=======
-	err = v.db.SelectContext(ctx, &vendorAdmins, query, args...)
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, ErrRecordNotFound
 		}
 		return nil, err
 	}
-<<<<<<< HEAD
 	return vendorinfo, nil
-=======
-	return vendorAdmins, nil
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 
 // UpdateVendorAdmin updates an existing vendor admin record in the database.
@@ -161,27 +134,3 @@ func (v *VendorAdminDB) DeleteVendorAdmin(ctx context.Context, userID, vendorID 
 	}
 	return nil
 }
-<<<<<<< HEAD
-=======
-
-// GetUserVendors retrieves all vendor IDs associated with a specific user.
-func (v *VendorAdminDB) GetUserVendors(ctx context.Context, userID uuid.UUID) ([]uuid.UUID, error) {
-	var vendorIDs []uuid.UUID
-	query, args, err := QB.Select("vendor_id").
-		From("vendor_admins").
-		Where(squirrel.Eq{"user_id": userID}).
-		ToSql()
-	if err != nil {
-		return nil, err
-	}
-
-	err = v.db.SelectContext(ctx, &vendorIDs, query, args...)
-	if err != nil {
-		if err == sql.ErrNoRows {
-			return nil, ErrRecordNotFound
-		}
-		return nil, err
-	}
-	return vendorIDs, nil
-}
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

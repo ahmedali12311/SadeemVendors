@@ -11,7 +11,6 @@ import (
 )
 
 var (
-<<<<<<< HEAD
 	ErrRecordNotFound        = errors.New("record not found")
 	ErrDuplicatedKey         = errors.New("user already have the value")
 	ErrDuplicatedRole        = errors.New("user Already have the role")
@@ -25,15 +24,6 @@ var (
 	ErrInvalidQuantity       = errors.New("requested quantity is not available")
 	ErrRecordNotFoundOrders  = errors.New("no orders available! ")
 	ErrDescriptionMissing    = errors.New("description is required") // New error
-=======
-	ErrRecordNotFound = errors.New("record not found")
-	ErrDuplicatedKey  = errors.New("user already have the value")
-	ErrDuplicatedRole = errors.New("user Already have the role")
-	ErrHasRole        = errors.New("user Already has a role")
-	ErrHasNoRoles     = errors.New("user Has no roles")
-
-	ErrUserNotFound = errors.New("User Not Found")
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 
 	QB     = squirrel.StatementBuilder.PlaceholderFormat(squirrel.Dollar)
 	Domain = os.Getenv("DOMAIN")
@@ -52,12 +42,9 @@ var (
 		"id",
 		"name",
 		"description",
-<<<<<<< HEAD
 		"subscription_end",
 		"subscription_days",
 		"is_visible",
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		"created_at",
 		"updated_at",
 		fmt.Sprintf("CASE WHEN NULLIF(img, '') IS NOT NULL THEN FORMAT('%s/%%s', img) ELSE NULL END AS img", Domain),
@@ -66,7 +53,6 @@ var (
 		"user_id",
 		"role_id",
 	}
-<<<<<<< HEAD
 	tableColumns     = []string{"id", "name", "vendor_id", "customer_id", "is_available", "is_needs_service"}
 	cartItemsColumns = []string{
 		"cart_id", "item_id", "quantity",
@@ -161,25 +147,5 @@ func NewModels(db *sqlx.DB) Model {
 		OrderDB:       OrderDB{db},
 		ItemDB:        ItemDB{db},
 		TransactionDB: Transaction{tx},
-=======
-	tableColumns = []string{"id", "name", "vendor_id", "customer_id", "is_available", "is_needs_service"}
-)
-
-type Model struct {
-	UserDB        userDB
-	TableDB       TableDB
-	VendorDB      VendorDB
-	User_roleDB   user_roleDB
-	VendorAdminDB VendorAdminDB
-}
-
-func NewModels(db *sqlx.DB) Model {
-	return Model{
-		UserDB:        userDB{db},
-		TableDB:       TableDB{db},
-		VendorDB:      VendorDB{db},
-		User_roleDB:   user_roleDB{db},
-		VendorAdminDB: VendorAdminDB{db},
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	}
 }

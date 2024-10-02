@@ -12,7 +12,6 @@ CREATE TABLE items (
         REFERENCES vendors (id)
         ON DELETE CASCADE
 );
-<<<<<<< HEAD
 ALTER TABLE items ADD COLUMN discount DECIMAL(5,2) DEFAULT 0;
 
 
@@ -42,5 +41,3 @@ EXECUTE FUNCTION update_discount_on_expiry();
 
 
 ALTER TABLE items ADD COLUMN quantity INT NOT NULL DEFAULT 0;
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
