@@ -242,7 +242,11 @@ function EditProfile() {
         <img
           src={preview}
           alt={name}
+<<<<<<< HEAD
           className={`profile-image ${!preview ? 'no-image' : defaultImage}`}
+=======
+          className={`profile-image ${!preview ? 'no-image' : ''}`}
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
           onError={handleImageError}
           onClick={() => imageRef.current?.click()}
         />

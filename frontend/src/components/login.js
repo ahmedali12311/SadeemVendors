@@ -27,11 +27,20 @@ function AuthForm() {
     axios.defaults.headers.common['Authorization'] = '';
     setToken(null);
   }, []);
+<<<<<<< HEAD
   const handleSubmit = async (event) => {
     event.preventDefault();
   
     const url = isSignUp ? 'http://localhost:8080/signup' : 'http://localhost:8080/signin';
   
+=======
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    const url = isSignUp ? 'http://localhost:8080/signup' : 'http://localhost:8080/signin';
+
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
     try {
       const formData = new FormData();
       formData.append('email', email);
@@ -39,19 +48,30 @@ function AuthForm() {
       formData.append('name', name);
       formData.append('phone', phone);
       if (image) formData.append('img', image);
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
       const response = await fetch(url, {
         method: 'POST',
         body: formData,
       });
+<<<<<<< HEAD
   
       const data = await response.json();
   
+=======
+
+      const data = await response.json();
+
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
       if (response.ok) {
         if (isSignUp) {
           handleSignIn();
         } else {
           const token = data.token;
+<<<<<<< HEAD
           if (token) {
             localStorage.setItem('token', token);
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -59,6 +79,11 @@ function AuthForm() {
           } else {
             setError('No token received.');
           }
+=======
+          localStorage.setItem('token', token);
+          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+          navigate('/vendors');
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
         }
       } else {
         setFieldErrors({
@@ -67,7 +92,11 @@ function AuthForm() {
           name: false,
           phone: false,
         });
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
         if (data.error && typeof data.error === 'object') {
           setFieldErrors({
             email: !!data.error.email,
@@ -75,13 +104,21 @@ function AuthForm() {
             name: !!data.error.name,
             phone: !!data.error.phone,
           });
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
           const errorMessage = data.error.email || 
                                 data.error.password || 
                                 data.error.name || 
                                 data.error.phone || 
                                 'An unknown error occurred.';
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
           setError(errorMessage);
         } else {
           setError(data.error || 'An unknown error occurred.');
@@ -91,7 +128,10 @@ function AuthForm() {
       setError('Failed to process request');
     }
   };
+<<<<<<< HEAD
   
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 
   const clearError = () => {
     const errorElement = document.querySelector('.error-message');
@@ -220,4 +260,8 @@ function AuthForm() {
   );
 }
 
+<<<<<<< HEAD
 export default AuthForm;
+=======
+export default AuthForm;
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

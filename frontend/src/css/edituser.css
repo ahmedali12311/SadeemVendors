@@ -39,6 +39,7 @@
     color: red; /* Style for error messages */
     font-size: 14px;
     margin-top: 5px;
+<<<<<<< HEAD
   }
   /* Spinner Styles */
 .spinner {
@@ -56,3 +57,6 @@
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
+=======
+  }
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

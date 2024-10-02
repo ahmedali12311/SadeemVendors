@@ -16,6 +16,7 @@ CREATE TABLE carts (
         REFERENCES vendors (id)
         ON DELETE CASCADE
 );
+<<<<<<< HEAD
 ALTER TABLE carts
 ADD CONSTRAINT ck_vendor_id
 CHECK ((vendor_id IS NULL AND quantity = 0) OR (vendor_id IS NOT NULL AND quantity > 0));
@@ -23,3 +24,5 @@ CHECK ((vendor_id IS NULL AND quantity = 0) OR (vendor_id IS NOT NULL AND quanti
 
 ALTER TABLE carts
 ADD COLUMN description TEXT DEFAULT NULL;
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

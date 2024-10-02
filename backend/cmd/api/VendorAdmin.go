@@ -7,7 +7,10 @@ import (
 
 	"project/internal/data"
 	"project/utils"
+<<<<<<< HEAD
 	"project/utils/validator"
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 
 	"github.com/google/uuid"
 )
@@ -43,14 +46,25 @@ func (app *application) GetVendorAdminHandler(w http.ResponseWriter, r *http.Req
 	utils.SendJSONResponse(w, http.StatusOK, utils.Envelope{"vendor_admin": vendorAdmin})
 }
 func (app *application) GetVendorAdminsHandler(w http.ResponseWriter, r *http.Request) {
+<<<<<<< HEAD
 
+=======
+	userIDRole, err := uuid.Parse(r.Context().Value(UserIDKey).(string))
+	if err != nil {
+		app.handleRetrievalError(w, r, err)
+	}
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	vendorIDUUID, err := uuid.Parse(r.PathValue("id"))
 	if err != nil {
 		app.errorResponse(w, r, http.StatusBadRequest, "invalid vendor_id")
 		return
 	}
 
+<<<<<<< HEAD
 	vendorAdmin, err := app.Model.VendorAdminDB.GetVendorAdmins(r.Context(), vendorIDUUID)
+=======
+	vendorAdmin, err := app.Model.VendorAdminDB.GetVendorAdmins(r.Context(), userIDRole, vendorIDUUID)
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	if err != nil {
 		if err.Error() == "vendor admin not found" {
 			app.errorResponse(w, r, http.StatusNotFound, err.Error())
@@ -64,14 +78,21 @@ func (app *application) GetVendorAdminsHandler(w http.ResponseWriter, r *http.Re
 }
 
 func (app *application) DeleteVendorAdminHandler(w http.ResponseWriter, r *http.Request) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	vendorIDUUID, err := uuid.Parse(r.PathValue("id"))
 	if err != nil {
 		app.errorResponse(w, r, http.StatusBadRequest, "invalid vendor_id")
 		return
 	}
 
+<<<<<<< HEAD
 	UserID := r.PathValue("adminId")
+=======
+	UserID := r.FormValue("user_id")
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 
 	UserIDUUID, err := uuid.Parse(UserID)
 	if err != nil {
@@ -90,6 +111,7 @@ func (app *application) DeleteVendorAdminHandler(w http.ResponseWriter, r *http.
 			return
 		}
 	}
+<<<<<<< HEAD
 
 	v, _ := app.Model.VendorDB.GetUserVendors(r.Context(), UserIDUUID)
 	if v == nil {
@@ -102,6 +124,8 @@ func (app *application) DeleteVendorAdminHandler(w http.ResponseWriter, r *http.
 		}
 	}
 
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	utils.SendJSONResponse(w, http.StatusOK, utils.Envelope{"message": "vendor admin deleted successfully"})
 }
 
@@ -113,6 +137,7 @@ func (app *application) CreateVendorAdminHandler(w http.ResponseWriter, r *http.
 		return
 	}
 
+<<<<<<< HEAD
 	UserEmail := r.FormValue("Email")
 
 	user := &data.User{}
@@ -137,21 +162,44 @@ func (app *application) CreateVendorAdminHandler(w http.ResponseWriter, r *http.
 	_, err = app.Model.VendorDB.GetVendor(vendorIDUUID, true)
 	if err != nil {
 
+=======
+	UserID, err := uuid.Parse(r.FormValue("User_ID"))
+	if err != nil {
+		app.badRequestResponse(w, r, errors.New("invalid user_id"))
+		return
+	}
+
+	vendorAdmin := data.VendorAdmin{
+		UserID:   UserID,
+		VendorID: vendorIDUUID,
+	}
+
+	_, err = app.Model.VendorDB.GetVendor(vendorIDUUID)
+	if err != nil {
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		app.handleRetrievalError(w, r, err)
 		return
 	}
 
 	createdVendorAdmin, err := app.Model.VendorAdminDB.InsertVendorAdmin(r.Context(), vendorAdmin)
 	if err != nil {
+<<<<<<< HEAD
 
 		app.handleRetrievalError(w, r, err)
 		return
 	}
 	getuserrole, err := app.Model.UserRoleDB.GetUserRole(getuser.ID)
+=======
+		app.handleRetrievalError(w, r, err)
+		return
+	}
+	_, err = app.Model.User_roleDB.UpdateRole(vendorAdmin.UserID, 2)
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	if err != nil {
 		app.handleRetrievalError(w, r, err)
 		return
 	}
+<<<<<<< HEAD
 
 	if getuserrole.RoleID == 3 {
 
@@ -166,6 +214,8 @@ func (app *application) CreateVendorAdminHandler(w http.ResponseWriter, r *http.
 			//don't shut down
 		}
 	}
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	utils.SendJSONResponse(w, http.StatusCreated, utils.Envelope{"vendor_admin": createdVendorAdmin})
 }
 
@@ -187,6 +237,7 @@ func (app *application) UpdateVendorAdminHandler(w http.ResponseWriter, r *http.
 		VendorID: vendorIDUUID,
 	}
 
+<<<<<<< HEAD
 	_, err = app.Model.VendorAdminDB.UpdateVendorAdmin(r.Context(), vendorAdmin)
 	if err != nil {
 		app.handleRetrievalError(w, r, err)
@@ -194,6 +245,15 @@ func (app *application) UpdateVendorAdminHandler(w http.ResponseWriter, r *http.
 
 	}
 	utils.SendJSONResponse(w, http.StatusOK, utils.Envelope{"vendor_admin": vendorAdmin})
+=======
+	updatedVendorAdmin, err := app.Model.VendorAdminDB.UpdateVendorAdmin(r.Context(), vendorAdmin)
+	if err != nil {
+		app.handleRetrievalError(w, r, err)
+		return
+	}
+
+	utils.SendJSONResponse(w, http.StatusOK, utils.Envelope{"vendor_admin": updatedVendorAdmin})
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 func (app *application) GetUserVendor(w http.ResponseWriter, r *http.Request) {
 	userUUID, err := uuid.Parse(r.PathValue("id"))
@@ -201,7 +261,11 @@ func (app *application) GetUserVendor(w http.ResponseWriter, r *http.Request) {
 		app.errorResponse(w, r, http.StatusBadRequest, "invalid vendor_id")
 		return
 	}
+<<<<<<< HEAD
 	vendor, err := app.Model.VendorDB.GetUserVendors(r.Context(), userUUID)
+=======
+	vendor, err := app.Model.VendorAdminDB.GetUserVendors(r.Context(), userUUID)
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	if err != nil {
 		app.handleRetrievalError(w, r, err)
 		return

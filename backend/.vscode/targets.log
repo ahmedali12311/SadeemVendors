@@ -8,12 +8,10 @@ make: *** No rule to make target 'all'.  Stop.
 # This is free software: you are free to change and redistribute it.
 # There is NO WARRANTY, to the extent permitted by law.
 
-# Make data base, printed on Wed Oct 02 09:25:41 2024
+# Make data base, printed on Wed Oct 02 12:44:12 2024
 
 # Variables
 
-# environment
-FPS_BROWSER_APP_PROFILE_STRING = Internet Explorer
 # environment
 SYSTEMDRIVE = C:
 # environment
@@ -33,7 +31,7 @@ SYSTEMROOT = C:\WINDOWS
 # environment
 PROCESSOR_LEVEL = 6
 # environment
-PSMODULEPATH = %ProgramFiles%\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules;C:\Program Files (x86)\Microsoft SQL Server\160\Tools\PowerShell\Modules\
+PSMODULEPATH = C:\Users\oG_Ju\Documents\WindowsPowerShell\Modules;C:\Users\oG_Ju\AppData\Local\Google\Cloud SDK\google-cloud-sdk\platform\PowerShell
 # default
 MAKE_COMMAND := C:/ProgramData/chocolatey/lib/make/tools/install/bin/make.exe
 # environment
@@ -41,9 +39,7 @@ GOPATH = C:\Go-workspace
 # automatic
 @D = $(patsubst %/,%,$(patsubst %\,%,$(dir $@)))
 # environment
-CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_29496_RYEIZGBXWJHCHBPY
-# environment
-FPS_BROWSER_USER_PROFILE_STRING = Default
+CHROME_CRASHPAD_PIPE_NAME = \\.\pipe\crashpad_30632_PZWWPCSDOKQNYJDY
 # environment
 VSCODE_HANDLES_UNCAUGHT_ERRORS = true
 # default
@@ -70,8 +66,6 @@ PROCESSOR_ARCHITEW6432 = AMD64
 MAKEFLAGS = pqrR
 # environment
 ONEDRIVE = C:\Users\oG_Ju\OneDrive
-# environment
-EFC_6412 = 1
 # makefile
 CURDIR := c:/Users/oG_Ju/OneDrive/Desktop/SadeemVendorapp/backend
 # automatic
@@ -91,9 +85,11 @@ MAKEFILE_LIST := Makefile
 # automatic
 @F = $(notdir $@)
 # environment
-VSCODE_PID = 29496
+VSCODE_PID = 30632
 # automatic
 ?D = $(patsubst %/,%,$(patsubst %\,%,$(dir $?)))
+# environment
+EFC_16292 = 1
 # automatic
 *F = $(notdir $*)
 # automatic
@@ -123,7 +119,7 @@ MAKELEVEL := 0
 # default
 MAKE = $(MAKE_COMMAND)
 # environment
-PATH = C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files (x86)\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\DTS\Binn\;C:\ProgramData\chocolatey\bin;C:\Program Files\Go\bin;C:\Program Files\Git LFS;C:\Program Files\PostgreSQL\16\bin;C:\Program Files (x86)\pgmodeler;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Users\oG_Ju\scoop\shims;C:\Users\oG_Ju\AppData\Local\Programs\Python\Launcher\;C:\Users\oG_Ju\AppData\Local\Microsoft\WindowsApps;D:\dart.sdk;C:\Users\oG_Ju\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\oG_Ju\AppData\Roaming\npm;C:\Users\oG_Ju\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0;C:\MinGW\bin;C:\Users\oG_Ju\OneDrive\Desktop\GO_PROJECTS\RSS\goose;C:\Users\oG_Ju\go\bin;C:\Users\oG_Ju\AppData\Local\atom\bin;C:\tools\dart-sdk\bin;C:\Users\oG_Ju\AppData\Local\Pub\Cache\bin;D:\flutter\bin;C:\Users\oG_Ju\.gradle\wrapper\dists\gradle-8.3-all\6en3ugtfdg5xnpx44z4qbwgas\gradle-8.3-all\gradle-8.3\bin
+PATH = C:\Program Files\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\Git\cmd;C:\Program Files\nodejs\;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\dotnet\;C:\Program Files\Docker\Docker\resources\bin;C:\Program Files (x86)\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\Tools\Binn\;C:\Program Files\Microsoft SQL Server\Client SDK\ODBC\170\Tools\Binn\;C:\Program Files\Microsoft SQL Server\160\DTS\Binn\;C:\ProgramData\chocolatey\bin;C:\Program Files\Go\bin;C:\Program Files\Git LFS;C:\Program Files\PostgreSQL\16\bin;C:\Program Files (x86)\pgmodeler;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Users\oG_Ju\scoop\shims;C:\Users\oG_Ju\AppData\Local\Programs\Python\Launcher\;C:\Users\oG_Ju\AppData\Local\Microsoft\WindowsApps;D:\dart.sdk;C:\Users\oG_Ju\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\oG_Ju\AppData\Roaming\npm;C:\Users\oG_Ju\AppData\Local\Packages\PythonSoftwareFoundation.Python.3.11_qbz5n2kfra8p0;C:\MinGW\bin;C:\Users\oG_Ju\OneDrive\Desktop\GO_PROJECTS\RSS\goose;C:\Users\oG_Ju\go\bin;C:\Users\oG_Ju\AppData\Local\atom\bin;C:\Program Files\PostgreSQL\16\bin;C:\Program Files\Go\bin;C:\tools\dart-sdk\bin;C:\Users\oG_Ju\AppData\Local\Pub\Cache\bin;D:\flutter\bin;C:\Users\oG_Ju\.gradle\wrapper\dists\gradle-8.3-all\6en3ugtfdg5xnpx44z4qbwgas\gradle-8.3-all\gradle-8.3\bin;C:\Users\oG_Ju\AppData\Local\Google\Cloud SDK\google-cloud-sdk\bin
 # environment
 COMPUTERNAME = ELLIE
 # default
@@ -211,7 +207,8 @@ SESSIONNAME = Console
 # makefile (from 'Makefile', line 2)
 DATABASE_URL = postgres://postgres:091093Aa@localhost:5432/internship?sslmode=disable
 # default
-.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs notintermediate shell-export archives jobserver output-sync load dospaths
+.FEATURES := target-specific order-only second-expansion else-if shortest-stem undefine oneshell nocomment grouped-target extra-prereqs notintermediate shell-export arc 
+hives jobserver output-sync load dospaths
 # environment
 PROCESSOR_REVISION = a503
 # environment
@@ -219,7 +216,7 @@ CHOCOLATEYTOOLSLOCATION = C:\tools
 # environment
 PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 165 Stepping 3, GenuineIntel
 # variable set hash-table stats:
-# Load=103/1024=10%, Rehash=0, Collisions=10/133=8%
+# Load=101/1024=10%, Rehash=0, Collisions=9/131=7%
 
 # Pattern-specific Variable Values
 
@@ -227,7 +224,7 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 165 Stepping 3, GenuineIntel
 
 # Directories
 
-# . (key c:/Users/oG_Ju/OneDrive/Desktop/SadeemVendorapp/backend, mtime 1726607942): 12 files, no impossibilities.
+# . (key c:/Users/oG_Ju/OneDrive/Desktop/SadeemVendorapp/backend, mtime 1727862284): 12 files, no impossibilities.
 
 # 12 files, no impossibilities in 1 directories.
 
@@ -325,6 +322,6 @@ migrate.up:
 # strcache performance: lookups = 39 / hit rate = 43%
 # hash-table stats:
 # Load=22/8192=0%, Rehash=0, Collisions=0/39=0%
-# Finished Make data base on Wed Oct 02 09:25:41 2024
+# Finished Make data base on Wed Oct 02 12:44:12 2024
 
  

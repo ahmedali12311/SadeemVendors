@@ -8,7 +8,10 @@ import (
 	"project/internal/data"
 	"project/utils"
 	"project/utils/validator"
+<<<<<<< HEAD
 	"strconv"
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	"strings"
 	"time"
 
@@ -23,6 +26,7 @@ const UserRoleKey contextKey = "userRole"
 
 func (app *application) AuthMiddleware(next http.Handler) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+<<<<<<< HEAD
 		var tokenString string
 		cookie, err := r.Cookie("accessToken")
 		if err != nil {
@@ -38,6 +42,21 @@ func (app *application) AuthMiddleware(next http.Handler) http.HandlerFunc {
 			tokenString = cookie.Value
 		}
 
+=======
+		authHeader := r.Header.Get("Authorization")
+		if authHeader == "" {
+			app.jwtErrorResponse(w, r, utils.ErrMissingToken)
+			return
+		}
+
+		parts := strings.Split(authHeader, " ")
+		if len(parts) != 2 || parts[0] != "Bearer" {
+			app.jwtErrorResponse(w, r, utils.ErrInvalidToken)
+			return
+		}
+
+		tokenString := parts[1]
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		token, err := utils.ValidateToken(tokenString)
 		if err != nil {
 			switch err.Error() {
@@ -78,11 +97,19 @@ func (app *application) AuthMiddleware(next http.Handler) http.HandlerFunc {
 		ctx = context.WithValue(ctx, UserRoleKey, userRole)
 		r = r.WithContext(ctx)
 
+<<<<<<< HEAD
 		next.ServeHTTP(w, r)
 	})
 }
 
 func (app *application) requireAdmin(next http.Handler) http.HandlerFunc {
+=======
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
+}
+
+func (app *application) requireAdmin(next http.Handler) http.Handler {
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		v := validator.New()
 		if !app.isAdmin(v, r) {
@@ -99,11 +126,16 @@ func (app *application) requireAdmin(next http.Handler) http.HandlerFunc {
 
 // Check if the user is an admin
 func (app *application) isAdmin(v *validator.Validator, r *http.Request) bool {
+<<<<<<< HEAD
 	userIDStr, ok := r.Context().Value(UserRoleKey).(string)
+=======
+	userIDStr, ok := r.Context().Value(UserIDKey).(string)
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	if !ok {
 		v.AddError("Token", "User ID is missing from context")
 		return false
 	}
+<<<<<<< HEAD
 	userIDStrs, err := strconv.Atoi(userIDStr)
 	if err != nil {
 		return false
@@ -112,6 +144,25 @@ func (app *application) isAdmin(v *validator.Validator, r *http.Request) bool {
 	return v.Valid()
 }
 func (app *application) requireVendorPermission(next http.Handler) http.HandlerFunc {
+=======
+	userID, err := uuid.Parse(userIDStr)
+	if err != nil {
+		v.AddError("Token", "Invalid user ID format")
+		return false
+	}
+	adminRoles, err := app.Model.User_roleDB.GetUserRole(userID)
+	if err != nil {
+		v.AddError("role", "Error retrieving user roles or insufficient permissions")
+		return false
+	}
+
+	data.ValidatingUserRole(v, adminRoles)
+	return v.Valid()
+}
+
+// Middleware to require vendor permissions
+func (app *application) requireVendorPermission(next http.Handler) http.Handler {
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		vendorIDStr := r.PathValue("id")
 
@@ -126,6 +177,7 @@ func (app *application) requireVendorPermission(next http.Handler) http.HandlerF
 			return
 		}
 
+<<<<<<< HEAD
 		v := validator.New()
 		if app.isAdmin(v, r) {
 			next.ServeHTTP(w, r)
@@ -133,6 +185,9 @@ func (app *application) requireVendorPermission(next http.Handler) http.HandlerF
 		}
 
 		err = app.isVendorOwner(r, vendorID)
+=======
+		err = app.isVendorPermission(r, vendorID)
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		if err != nil {
 			if errors.Is(err, data.ErrRecordNotFound) {
 				app.jwtErrorResponse(w, r, errors.New("you do not have permission to access this resource"))
@@ -141,28 +196,45 @@ func (app *application) requireVendorPermission(next http.Handler) http.HandlerF
 			}
 			return
 		}
+<<<<<<< HEAD
 
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		next.ServeHTTP(w, r)
 	})
 }
 
+<<<<<<< HEAD
 // Check if the user is the owner of the vendor
 func (app *application) isVendorOwner(r *http.Request, vendorID uuid.UUID) error {
+=======
+// Check if the user has vendor permissions
+func (app *application) isVendorPermission(r *http.Request, vendorID uuid.UUID) error {
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	userIDStr, ok := r.Context().Value(UserIDKey).(string)
 	if !ok {
 		return errors.New("user ID is missing from context")
 	}
+<<<<<<< HEAD
 
 	userid, err := uuid.Parse(userIDStr)
+=======
+	userID, err := uuid.Parse(userIDStr)
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	if err != nil {
 		return errors.New("invalid user ID format")
 	}
 
+<<<<<<< HEAD
 	ownerns, err := app.Model.VendorAdminDB.GetVendorAdmins(r.Context(), vendorID)
+=======
+	_, err = app.Model.VendorAdminDB.GetVendorAdmins(r.Context(), userID, vendorID)
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	if err != nil {
 		if errors.Is(err, data.ErrRecordNotFound) {
 			return errors.New("you do not have permission to access this resource")
 		}
+<<<<<<< HEAD
 		return errors.New("error checking vendor ownership")
 	}
 	for _, value := range ownerns {
@@ -176,6 +248,16 @@ func (app *application) AuthorizeUserUpdate(next http.Handler) http.HandlerFunc 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		userIDFromURL := r.PathValue("id")
 		userIDFromContext, ok := r.Context().Value(UserIDKey).(string)
+=======
+		return errors.New("error checking vendor permissions")
+	}
+	return nil
+}
+
+func (app *application) AuthorizeUserUpdate(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		userID, ok := r.Context().Value(UserIDKey).(string)
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		if !ok {
 			app.errorResponse(w, r, http.StatusUnauthorized, "user ID is missing from context")
 			return
@@ -187,9 +269,15 @@ func (app *application) AuthorizeUserUpdate(next http.Handler) http.HandlerFunc 
 			return
 		}
 
+<<<<<<< HEAD
 		if r.Method == http.MethodPut {
 			// Check if the user is updating their own account or is an admin
 			if userIDFromContext != userIDFromURL && userRole != "1" {
+=======
+		// Check if the user is updating their own account
+		if r.Method == http.MethodPut {
+			if userID != r.Context().Value(UserIDKey) && userRole != "1" {
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 				app.errorResponse(w, r, http.StatusForbidden, "you do not have permission to update this user")
 				return
 			}
@@ -240,6 +328,7 @@ func (app *application) recoverPanic(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
+<<<<<<< HEAD
 
 /*
 func (app *application) rateLimit(next http.Handler) http.Handler {
@@ -302,3 +391,5 @@ func (app *application) rateLimit(next http.Handler) http.Handler {
 	})
 }
 */
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

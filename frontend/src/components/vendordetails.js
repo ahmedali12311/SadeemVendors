@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams,  } from 'react-router-dom';
@@ -166,10 +167,61 @@ const handleErrorMessageTimeout = () => {
         const token = localStorage.getItem('token');
         try {
           const response = await fetch(`http://localhost:8080/vendor/${id}/items?page=${currentPage}&page_size=${itemsPerPage}`, {
+=======
+import React, { useState, useEffect, useRef } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import '../css/vendordetails.css';
+import defaultimage from './vendor.jpg';
+
+function VendorDetails() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [vendor, setVendor] = useState(null);
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [userRole, setUserRole] = useState(null);
+  const imageRef = useRef(null);
+
+  useEffect(() => {
+    const fetchVendorDetails = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/vendors/${id}`);
+        
+        if (!response.ok) {
+          if (response.status === 401) {
+            setError('Unauthorized access. You will be redirected to the sign-in page.');
+            setTimeout(() => navigate('/signin'), 3000); // Delay navigation by 3 seconds
+            return;
+          }
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data && data.vendor) {
+          setVendor(data.vendor);
+        } else {
+          throw new Error('Vendor data is undefined or null');
+        }
+      } catch (error) {
+        console.error('Error fetching vendor details:', error);
+        setError('Failed to load vendor details');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    const fetchUserRole = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        if (token) {
+          const response = await fetch('http://localhost:8080/me', {
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
+<<<<<<< HEAD
       
           if (!response.ok) {
             throw new Error('Failed to fetch items');
@@ -1766,3 +1818,96 @@ Edit Quantity
 }
 
 export default VendorDetails;
+=======
+
+          if (!response.ok) {
+            if (response.status === 401) {
+              setError('Unauthorized access. You will be redirected to the sign-in page.');
+              setTimeout(() => navigate('/signin'), 3000); // Delay navigation by 3 seconds
+              return;
+            }
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+
+          const data = await response.json();
+          setUserRole(data.me.user_role);
+        }
+      } catch (error) {
+        console.error('Error fetching user role:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVendorDetails();
+    fetchUserRole();
+  }, [id, navigate]);
+
+  const handleEditClick = () => {
+    navigate(`/edit-vendor/${id}`);
+  };
+
+  const handleImageHover = () => {
+    if (imageRef.current) {
+      imageRef.current.style.cursor = 'pointer';
+    }
+  };
+
+  const handleImageLeave = () => {
+    if (imageRef.current) {
+      imageRef.current.style.cursor = 'default';
+    }
+  };
+
+  const handleImageError = (e) => {
+    e.target.src = defaultimage;
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="error-overlay">
+        <div className="error-box">
+          {error}
+        </div>
+      </div>
+    );
+  }
+
+  if (!vendor) {
+    return <div>No vendor details available</div>;
+  }
+
+  return (
+    <div className="page-container">
+      <div className="vendor-details-container">
+        <div className="vendor-image-container">
+          <img
+            src={vendor.img || defaultimage}  // Use vendor's image or default image
+            alt={vendor.name || 'Vendor'}
+            className="vendor-image"
+            ref={imageRef}
+            onMouseOver={handleImageHover}
+            onMouseOut={handleImageLeave}
+            onError={handleImageError}  // Handle image load error
+          />
+        </div>
+        <div className="vendor-info-container">
+          <h1 className="vendor-name">{vendor.name}</h1>
+          <p className="vendor-description">{vendor.description || 'No description available'}</p>
+          {userRole === '1' && (
+            <button className="edit-button" onClick={handleEditClick}>
+              Edit Vendor
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default VendorDetails;
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

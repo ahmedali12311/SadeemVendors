@@ -76,10 +76,17 @@ const UsersPage = () => {
     navigate(`/users/edit/${userId}`);
   };
 
+<<<<<<< HEAD
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
+=======
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+  console.log('Users state:', users); // Log the users state
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 
   return (
     <div className="user-list-container">
@@ -92,6 +99,7 @@ const UsersPage = () => {
           value={searchTerm}
           onChange={handleSearchChange}
         />
+<<<<<<< HEAD
     {searchTerm && (
   <ul className="dropdown-menu">
     {dropdownResults.length > 0 ? (
@@ -115,6 +123,24 @@ const UsersPage = () => {
     )}
   </ul>
 )}
+=======
+        {searchTerm && (
+          <ul className="dropdown-menu">
+            {dropdownResults.length > 0 ? (
+              dropdownResults.map(user => (
+                <li 
+                  key={user.id} 
+                  onClick={() => handleSearchResultClick(user.id)} // Navigate on click
+                >
+                  {user.name}
+                </li>
+              ))
+            ) : (
+              <li>No results found</li>
+            )}
+          </ul>
+        )}
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
       </div>
       <div className="sort-selection">
         <select value={sortOrder} onChange={handleSortChange}>

@@ -29,6 +29,13 @@ github.com/lann/ps
 github.com/lib/pq
 github.com/lib/pq/oid
 github.com/lib/pq/scram
+<<<<<<< HEAD
+=======
+# github.com/rs/cors v1.11.1
+## explicit; go 1.13
+github.com/rs/cors
+github.com/rs/cors/internal
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 # golang.org/x/crypto v0.26.0
 ## explicit; go 1.20
 golang.org/x/crypto/bcrypt
@@ -36,6 +43,9 @@ golang.org/x/crypto/blowfish
 # golang.org/x/exp v0.0.0-20240823005443-9b4947da3948
 ## explicit; go 1.20
 golang.org/x/exp/rand
+<<<<<<< HEAD
 # golang.org/x/time v0.6.0
 ## explicit; go 1.18
 golang.org/x/time/rate
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

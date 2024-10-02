@@ -32,9 +32,13 @@
 }
 
 .sidebar a {
+<<<<<<< HEAD
     color: 
     #333;
     
+=======
+    color: #333;
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
     text-decoration: none;
     font-size: 18px;
     font-weight: 500;

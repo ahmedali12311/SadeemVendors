@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode'; // Correct import for jwt-decode
@@ -28,6 +29,16 @@ const Navbar = ({ initialCartItems, onCartItemsChange, refreshCart }) => {
     useEffect(() => {
         fetchCartItems();
     }, [refreshCart]);
+=======
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import {jwtDecode} from 'jwt-decode'; // Correct import
+import '../css/Navbar.css'; // For styling
+
+const Navbar = () => {
+    const [userRole, setUserRole] = useState(null);
+    const navigate = useNavigate();
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -36,10 +47,15 @@ const Navbar = ({ initialCartItems, onCartItemsChange, refreshCart }) => {
                 const decodedToken = jwtDecode(token);
                 const currentTime = Date.now() / 1000;
                 if (decodedToken.exp < currentTime) {
+<<<<<<< HEAD
+=======
+                    // Token expired
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
                     localStorage.removeItem('token');
                     setUserRole(null);
                 } else {
                     setUserRole(decodedToken.userRole);
+<<<<<<< HEAD
                     fetchCartItems();
                 }
             } catch (error) {
@@ -139,12 +155,26 @@ const Navbar = ({ initialCartItems, onCartItemsChange, refreshCart }) => {
         }
     };
 
+=======
+                }
+            } catch (error) {
+                // Invalid token
+                localStorage.removeItem('token');
+                setUserRole(null);
+            }
+        } else {
+            setUserRole(null);
+        }
+    }, []);
+
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
     const handleSignOut = () => {
         localStorage.removeItem('token');
         setUserRole(null);
         navigate('/signin');
     };
 
+<<<<<<< HEAD
     const toggleCartDropdown = () => {
         setCartDropdownVisible(prev => !prev);
         setErrorMessage(null);
@@ -275,19 +305,28 @@ const Navbar = ({ initialCartItems, onCartItemsChange, refreshCart }) => {
             <div className="logo">
                 <img src={logo} alt="Logo" />
             </div>
+=======
+    return (
+        <nav className="navbar">
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
             <ul className="center-links">
                 <li><Link to="/">Home</Link></li>
             </ul>
             <ul className="end-links">
                 {userRole === "1" && (
+<<<<<<< HEAD
                     <>
                         <li><Link to="/add-vendor">Add Vendor</Link></li>
                         <li><Link to="/users">Users</Link></li>
                     </>
+=======
+                    <li><Link to="/add-vendor">Add Vendor</Link></li>
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
                 )}
                 {userRole ? (
                     <>
                         <li><Link to="/profile">Profile</Link></li>
+<<<<<<< HEAD
                         <li><Link to="/orders">Orders</Link></li>
                         <li>
                             <button onClick={toggleCartDropdown} disabled={loadingCartItems}>
@@ -356,6 +395,8 @@ const Navbar = ({ initialCartItems, onCartItemsChange, refreshCart }) => {
                                 </div>
                             )}
                         </li>
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
                         <li><button onClick={handleSignOut}>Sign Out</button></li>
                     </>
                 ) : (
@@ -366,4 +407,8 @@ const Navbar = ({ initialCartItems, onCartItemsChange, refreshCart }) => {
     );
 };
 
+<<<<<<< HEAD
 export default Navbar;
+=======
+export default Navbar;
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

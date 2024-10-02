@@ -1,4 +1,5 @@
 CREATE TABLE vendors (
+<<<<<<< HEAD
     id               uuid PRIMARY KEY DEFAULT gen_random_uuid(),
     name             VARCHAR(255) NOT NULL,
     img              VARCHAR(255),
@@ -28,3 +29,12 @@ CREATE TRIGGER check_subscription_end
 BEFORE INSERT OR UPDATE ON vendors
 FOR EACH ROW
 EXECUTE FUNCTION update_visibility();
+=======
+    id            uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+    name          VARCHAR(255) NOT NULL,
+    img           VARCHAR(255),
+    description   TEXT,
+    created_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at    TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

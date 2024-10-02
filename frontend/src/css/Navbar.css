@@ -1,10 +1,17 @@
+<<<<<<< HEAD
 .navbar {
     background: rgba(229, 242, 247, 0.9);
+=======
+/* src/components/Navbar.css */
+.navbar {
+    background: linear-gradient(90deg, #E5F2F7 0%, #C1D9E3 100%);
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
     padding: 1rem 2rem;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     justify-content: space-between;
+<<<<<<< HEAD
     transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
     backdrop-filter: blur(0);
     position: fixed;
@@ -40,6 +47,8 @@
 .navbar.no-scroll {
     background: transparent; /* Fully transparent background when no scrolling */
     box-shadow: none; /* No shadow when no scrolling */
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 
 .navbar ul {
@@ -57,6 +66,7 @@
 
 .navbar .end-links {
     display: flex;
+<<<<<<< HEAD
     gap: 1rem; /* Space between end links */
 }
 
@@ -71,6 +81,22 @@
     font-weight: 500; /* Font weight */
     position: relative; /* Position for before/after pseudo-elements */
     transition: color 0.3s ease; /* Smooth color transition */
+=======
+    gap: 1rem;
+}
+
+.navbar li {
+    margin-right: 1rem;
+}
+
+.navbar a, .navbar button {
+    color: #333;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    position: relative;
+    transition: color 0.3s ease;
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 
 .navbar a::before, .navbar button::before {
@@ -80,6 +106,7 @@
     bottom: -5px;
     width: 100%;
     height: 2px;
+<<<<<<< HEAD
     background-color: #E5F2F7; /* Underline color */
     transform: scaleX(0);
     transition: transform 0.3s ease;
@@ -89,6 +116,17 @@
 .navbar a:hover::before, .navbar button::before {
     transform: scaleX(1); /* Animate underline on hover */
     transform-origin: bottom left; /* Change origin on hover */
+=======
+    background-color: #E5F2F7;
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    transform-origin: bottom right;
+}
+
+.navbar a:hover::before, .navbar button:hover::before {
+    transform: scaleX(1);
+    transform-origin: bottom left;
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 
 .navbar a:hover, .navbar button:hover {
@@ -96,6 +134,7 @@
 }
 
 .navbar button {
+<<<<<<< HEAD
     background: transparent; /* No background for button */
     border: none; /* No border */
     cursor: pointer; /* Pointer cursor */
@@ -117,6 +156,29 @@
 
 .navbar a:hover, .navbar button:hover {
     transform: translateY(-3px); /* Slight lift effect on hover */
+=======
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.navbar a {
+    padding: 0.5rem 0;
+    display: inline-block;
+}
+
+.navbar button {
+    padding: 0.5rem;
+}
+
+.navbar a, .navbar button {
+    transition: transform 0.3s ease;
+}
+
+.navbar a:hover, .navbar button:hover {
+    transform: translateY(-3px); /* Slight lift effect */
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 
 .navbar a::after, .navbar button::after {
@@ -126,13 +188,20 @@
     left: 0;
     width: 100%;
     height: 3px;
+<<<<<<< HEAD
     background: rgba(0, 0, 0, 0.1); /* Underline color */
     transform: scaleX(0);
     transform-origin: bottom right; /* Origin for animation */
+=======
+    background: rgba(0, 0, 0, 0.1);
+    transform: scaleX(0);
+    transform-origin: bottom right;
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
     transition: transform 0.3s ease;
 }
 
 .navbar a:hover::after, .navbar button:hover::after {
+<<<<<<< HEAD
     transform: scaleX(1); /* Animate underline on hover */
     transform-origin: bottom left; /* Change origin on hover */
 }
@@ -246,3 +315,16 @@
     background-color: #95a5a6; /* Grey color for disabled state */
     cursor: not-allowed; /* Not-allowed cursor */
 }
+=======
+    transform: scaleX(1);
+    transform-origin: bottom left;
+}
+
+.navbar-profile-image {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+}
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

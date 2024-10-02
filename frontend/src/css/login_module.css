@@ -1,11 +1,16 @@
 @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
 .login-page {
+<<<<<<< HEAD
   background: linear-gradient(to bottom right, #e0f7fa, #80deea);
+=======
+  background-color: #E5F2F7; /* Same color as login container */
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
   overflow: hidden; /* Prevent scrolling */
   height: 100vh; /* Full viewport height */
   margin: 0;
   padding: 0;
 }
+<<<<<<< HEAD
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -32,6 +37,9 @@
   background-color: #f7f7f7;
   border-radius: 10px;
 }
+=======
+
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 /* Existing styles for the login component */
 .login-component {
   position: relative;
@@ -145,7 +153,11 @@ button {
   border: none;
   background-color: #3a9c9f;
   color: #FFFFFF;
+<<<<<<< HEAD
   font-size: 11px;
+=======
+  font-size: 12px;
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
   font-weight: bold;
   padding: 12px 45px;
   letter-spacing: 1px;
@@ -466,4 +478,8 @@ button span.placeholder {
 
 .login-component .overlay-right button {
   color: #FFFFFF;
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

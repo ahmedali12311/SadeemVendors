@@ -16,6 +16,7 @@ function Vendors() {
   const [sortOrder, setSortOrder] = useState('latest');
   const [showDropdown, setShowDropdown] = useState(false);
   const [showSearchInput] = useState(false);
+<<<<<<< HEAD
   const [userData, setUserData] = useState(null);
 
   const itemsPerPage = 12;
@@ -48,6 +49,20 @@ function Vendors() {
       if (data && data.Vendors) {
         let vendorsList = data.Vendors;
   
+=======
+
+  const itemsPerPage = 12;
+  const navigate = useNavigate();
+
+  const fetchVendors = useCallback(async (page) => {
+    setLoading(true);
+    try {
+      const response = await fetch(`http://localhost:8080/vendors?page=${page}&pageSize=${itemsPerPage}&sort=${sortOrder}`);
+      const data = await response.json();
+      if (data && data.Vendors) {
+        let vendorsList = data.Vendors;
+
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
         // Filter vendors if the user is a vendor
         if (userVendorId && !isAdmin) {
           vendorsList = vendorsList.filter(vendor => vendor.id === userVendorId);
@@ -59,7 +74,11 @@ function Vendors() {
             vendorsList.unshift(userVendor);
           }
         }
+<<<<<<< HEAD
   
+=======
+
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
         setVendors(vendorsList);
         setFilteredVendors(vendorsList);
         setTotalPages(Math.ceil(data.TotalCount / itemsPerPage));
@@ -88,6 +107,10 @@ function Vendors() {
           Authorization: `Bearer ${token}`,
         },
       });
+<<<<<<< HEAD
+=======
+    
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
       if (!response.ok) {
         console.error(`HTTP error! Status: ${response.status}`);
         if (response.status === 401) {
@@ -97,6 +120,7 @@ function Vendors() {
         }
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
+<<<<<<< HEAD
       
       const userData = await response.json();
       setUserData(userData); // Store userData in state
@@ -128,6 +152,34 @@ function Vendors() {
           } catch (error) {
             console.error('Error fetching vendor data:', error);
             setError('Failed to load vendor data');
+=======
+    
+      const userData = await response.json();
+      console.log('User Data:', userData); // Debug user data
+    
+      if (userData && userData.me) {
+        setIsAdmin(userData.me.user_role === "1");
+    
+        if (userData.me.user_role === "2") {
+          const vendorResponse = await fetch(`http://localhost:8080/uservendors/${userData.me.user_info.id}`, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+    
+          if (!vendorResponse.ok) {
+            console.error(`HTTP error! Status: ${vendorResponse.status}`);
+            throw new Error(`HTTP error! Status: ${vendorResponse.status}`);
+          }
+    
+          const vendorData = await vendorResponse.json();
+          console.log('Vendor Data:', vendorData); // Debug vendor data
+    
+          if (vendorData && vendorData.vendor && vendorData.vendor.length > 0) {
+            setUserVendorId(vendorData.vendor[0].id); // Ensure you are setting the ID correctly
+          } else {
+            console.log('No vendor data found or vendor array is empty');
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
           }
         }
       } else {
@@ -199,6 +251,7 @@ function Vendors() {
   if (error) {
     return <div className="error-message">{error}</div>;
   }
+<<<<<<< HEAD
   const currentPage = page; // use the currentPage state
   
   const startPage = Math.max(1, currentPage - visiblePages + 1);
@@ -212,6 +265,12 @@ function Vendors() {
     <div className="page-container">
       <div className="vendor-list">
       <ul className="vendor-grid">
+=======
+
+  return (
+    <div className="page-container">
+      <div className="vendor-list">
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
         <h1 className="title">Vendors</h1>
 
         {/* Search Input Container */}
@@ -225,6 +284,7 @@ function Vendors() {
             onFocus={() => searchTerm && setShowDropdown(true)}
             onBlur={() => setTimeout(() => setShowDropdown(false), 200)}
           />
+<<<<<<< HEAD
           
         {showDropdown && searchTerm && filteredVendors.length > 0 && (
   <ul className="dropdown-menu">
@@ -243,6 +303,18 @@ function Vendors() {
 )}
         </div>
         </ul>
+=======
+          {showDropdown && searchTerm && filteredVendors.length > 0 && (
+            <ul className="dropdown-menu">
+              {filteredVendors.map(vendor => (
+                <li key={vendor.id} onClick={() => handleSelectVendor(vendor.id)}>
+                  {vendor.name}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 
         {/* Sort Selection */}
         <div className="sort-selection">
@@ -259,24 +331,44 @@ function Vendors() {
         )}
         {/* Vendors List */}
         <ul className="vendor-cards">
+<<<<<<< HEAD
 
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
           {vendors.length > 0 ? (
             vendors.map(vendor => (
               <li key={vendor.id} className="vendor-card">
                 <div className="vendor-header">
+<<<<<<< HEAD
                 <img 
   src={vendor.img || defaultImage} 
   alt={vendor.name} 
   className="vendor-logo"
   onError={handleImageError}  // Handle image load error
 />
+=======
+                  <img 
+                    src={vendor.img || defaultImage}
+                    alt={vendor.name}
+                    className="vendor-logo"
+                    onError={handleImageError}  // Handle image load error
+                  />
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
                   <div className="vendor-content">
                     <h2 className="vendor-name">{vendor.name}</h2>  
                     <p className="vendor-description">{vendor.description || 'No description available'}</p>
                     <button onClick={() => handleVisitClick(vendor.id)}>Visit</button>
+<<<<<<< HEAD
                     {(isAdmin || (userVendorId && vendor.id === userVendorId && userData)) && (
   <button onClick={() => handleEditClick(vendor.id)}>Edit</button>
 )}
+=======
+                    {(isAdmin || (userVendorId && vendor.id === userVendorId)) && (
+                      <>
+                        <button onClick={() => handleEditClick(vendor.id)}>Edit</button>
+                      </>
+                    )}
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
                   </div>
                 </div>
               </li>
@@ -286,6 +378,7 @@ function Vendors() {
           )}
         </ul>
         <div className="pagination-controls">
+<<<<<<< HEAD
     <button onClick={() => handlePageChange(page - 1)} disabled={page === 1 || loading}>Previous</button>
     {pages.map((page) => (
       <button
@@ -310,3 +403,16 @@ function Vendors() {
 }
 
 export default Vendors;
+=======
+          <button onClick={() => handlePageChange(page - 1)} disabled={page === 1 || loading}>Previous</button>
+          <span>Page {page} of {totalPages}</span>
+          <button onClick={() => handlePageChange(page + 1)} disabled={page === totalPages || loading}>Next</button>
+        </div>
+        {loading && <p>Loading...</p>}
+      </div>
+    </div>
+  );
+}
+
+export default Vendors;
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

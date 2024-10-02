@@ -5,7 +5,10 @@ import '../css/addvendor.css';
 function AddVendor() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
+<<<<<<< HEAD
   const [subscriptionDays, setSubscriptionDays] = useState('');
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
   const [imageError, setImageError] = useState(null);
@@ -14,13 +17,19 @@ function AddVendor() {
     name: false,
     description: false,
     image: false,
+<<<<<<< HEAD
     subscriptionDays: false,
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
   });
   const [errorMessages, setErrorMessages] = useState({
     name: '',
     description: '',
     image: '',
+<<<<<<< HEAD
     subscriptionDays: '',
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
     general: '',
   });
   const navigate = useNavigate();
@@ -36,13 +45,19 @@ function AddVendor() {
       name: false,
       description: false,
       image: false,
+<<<<<<< HEAD
       subscriptionDays: false,
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
     });
     setErrorMessages({
       name: '',
       description: '',
       image: '',
+<<<<<<< HEAD
       subscriptionDays: '',
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
       general: '',
     });
 
@@ -60,6 +75,7 @@ function AddVendor() {
       hasErrors = true;
     }
 
+<<<<<<< HEAD
     // Validate subscriptionDays only if it is not empty
     if (subscriptionDays.trim() && isNaN(subscriptionDays)) {
       setFieldErrors(prev => ({ ...prev, subscriptionDays: true }));
@@ -67,6 +83,8 @@ function AddVendor() {
       hasErrors = true;
     }
 
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
     // Validate image
     if (imageError) {
       setFieldErrors(prev => ({ ...prev, image: true }));
@@ -81,7 +99,10 @@ function AddVendor() {
     const formData = new FormData();
     formData.append('name', name);
     formData.append('description', description);
+<<<<<<< HEAD
     formData.append('subscriptionDays', subscriptionDays);
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
     if (image) {
       formData.append('img', image);
     }
@@ -104,13 +125,19 @@ function AddVendor() {
             name: !!errorObject.name,
             description: !!errorObject.description,
             image: !!errorObject.img,
+<<<<<<< HEAD
             subscriptionDays: !!errorObject.subscriptionDays,
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
           });
           setErrorMessages({
             name: errorObject.name || '',
             description: errorObject.description || '',
             image: errorObject.img || '',
+<<<<<<< HEAD
             subscriptionDays: errorObject.subscriptionDays || '',
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
             general: '',
           });
         }
@@ -165,6 +192,7 @@ function AddVendor() {
     }
   };
 
+<<<<<<< HEAD
   const handleSubscriptionDaysChange = (e) => {
     setSubscriptionDays(e.target.value);
     if (e.target.value && !isNaN(e.target.value)) {
@@ -175,6 +203,10 @@ function AddVendor() {
 
   return (
     <div className="vendor-container">
+=======
+  return (
+    <div className="page-container">
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
       <div className="edit-vendor-container">
         <div className="edit-vendor-image-container">
           <input
@@ -219,6 +251,7 @@ function AddVendor() {
               />
               {errorMessages.description && <p className="error-message">{errorMessages.description}</p>}
             </div>
+<<<<<<< HEAD
             <div className="form-group">
               <label htmlFor="subscriptionDays">Subscription Days (Optional)</label>
               <input
@@ -230,6 +263,8 @@ function AddVendor() {
               />
               {errorMessages.subscriptionDays && <p className="error-message">{errorMessages.subscriptionDays}</p>}
             </div>
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
             <button type="submit">Save Vendor</button>
           </form>
         </div>

@@ -1,6 +1,10 @@
 package main
 
 import (
+<<<<<<< HEAD
+=======
+	"errors"
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	"fmt"
 	"net/http"
 	"project/internal/data"
@@ -33,7 +37,11 @@ func (app *application) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		app.notFoundResponse(w, r)
 		return
 	}
+<<<<<<< HEAD
 	users, err := app.Model.UserRoleDB.GetUserRole(user.ID)
+=======
+	users, err := app.Model.User_roleDB.GetUserRole(user.ID)
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	if err != nil {
 		app.handleRetrievalError(w, r, err)
 		return
@@ -46,7 +54,10 @@ func (app *application) LoginHandler(w http.ResponseWriter, r *http.Request) {
 		app.serverErrorResponse(w, r, err)
 		return
 	}
+<<<<<<< HEAD
 	utils.SetTokenCookie(w, token)
+=======
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 
 	utils.SendJSONResponse(w, http.StatusOK, utils.Envelope{
 		"expires": "24 hours",
@@ -106,6 +117,10 @@ func (app *application) IndexUserHandler(w http.ResponseWriter, r *http.Request)
 		app.handleRetrievalError(w, r, err)
 		return
 	}
+<<<<<<< HEAD
+=======
+	fmt.Println(users)
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 	// Send JSON response
 	utils.SendJSONResponse(w, http.StatusOK, utils.Envelope{"users": users})
 }
@@ -130,6 +145,10 @@ func (app *application) ShowUserHandler(w http.ResponseWriter, r *http.Request) 
 func (app *application) SignupHandler(w http.ResponseWriter, r *http.Request) {
 	v := validator.New()
 	user := &data.User{
+<<<<<<< HEAD
+=======
+		ID:       uuid.New(),
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		Name:     r.FormValue("name"),
 		Phone:    r.FormValue("phone"),
 		Email:    r.FormValue("email"),
@@ -172,7 +191,11 @@ func (app *application) SignupHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+<<<<<<< HEAD
 	if _, err = app.Model.UserRoleDB.GrantRole(user.ID, 3); err != nil {
+=======
+	if _, err = app.Model.User_roleDB.GrantRole(user.ID, 3); err != nil {
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		app.badRequestResponse(w, r, err)
 		return
 	}
@@ -244,7 +267,16 @@ func (app *application) UpdateUserHandler(w http.ResponseWriter, r *http.Request
 		if user.Img != nil && *user.Img != *oldImg {
 			utils.DeleteImageFile(*user.Img)
 		}
+<<<<<<< HEAD
 		app.handleRetrievalError(w, r, err)
+=======
+		switch {
+		case errors.Is(err, data.ErrDuplicatedKey):
+			app.errorResponse(w, r, http.StatusConflict, "Email already exists, try something else")
+		default:
+			app.serverErrorResponse(w, r, err)
+		}
+>>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 		return
 	}
 
