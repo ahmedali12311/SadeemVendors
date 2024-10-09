@@ -1,0 +1,8 @@
+runtime: custom
+env: flex
+
+env_variables:
+  PORT: 8080
+
+manual_scaling:
+  instances: 1

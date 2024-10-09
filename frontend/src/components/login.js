@@ -1,14 +1,13 @@
-import React, { useState,useEffect  } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../css/login_module.css';
-
 import axios from 'axios';
 
 function AuthForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState(''); // This will store the digits after +2189
   const [image, setImage] = useState(null);
   const [imageName, setImageName] = useState('');
   const [error, setError] = useState(null);
@@ -22,56 +21,40 @@ function AuthForm() {
   });
 
   const navigate = useNavigate();
+
   useEffect(() => {
     localStorage.removeItem('token');
     axios.defaults.headers.common['Authorization'] = '';
     setToken(null);
   }, []);
-<<<<<<< HEAD
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-  
-    const url = isSignUp ? 'http://localhost:8080/signup' : 'http://localhost:8080/signin';
-  
-=======
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const url = isSignUp ? 'http://localhost:8080/signup' : 'http://localhost:8080/signin';
+    const url = isSignUp
+      ? 'http://localhost:8080/signup'
+      : 'http://localhost:8080/signin';
 
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
     try {
       const formData = new FormData();
       formData.append('email', email);
       formData.append('password', password);
       formData.append('name', name);
-      formData.append('phone', phone);
+      formData.append('phone', `+2189${phone}`); // Prepend +2189 to the phone number
       if (image) formData.append('img', image);
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
       const response = await fetch(url, {
         method: 'POST',
         body: formData,
       });
-<<<<<<< HEAD
-  
-      const data = await response.json();
-  
-=======
 
       const data = await response.json();
 
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
       if (response.ok) {
         if (isSignUp) {
           handleSignIn();
         } else {
           const token = data.token;
-<<<<<<< HEAD
           if (token) {
             localStorage.setItem('token', token);
             axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -79,11 +62,6 @@ function AuthForm() {
           } else {
             setError('No token received.');
           }
-=======
-          localStorage.setItem('token', token);
-          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-          navigate('/vendors');
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
         }
       } else {
         setFieldErrors({
@@ -92,11 +70,7 @@ function AuthForm() {
           name: false,
           phone: false,
         });
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
         if (data.error && typeof data.error === 'object') {
           setFieldErrors({
             email: !!data.error.email,
@@ -104,21 +78,14 @@ function AuthForm() {
             name: !!data.error.name,
             phone: !!data.error.phone,
           });
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
-          const errorMessage = data.error.email || 
-                                data.error.password || 
-                                data.error.name || 
-                                data.error.phone || 
-                                'An unknown error occurred.';
-<<<<<<< HEAD
-  
-=======
+          const errorMessage =
+            data.error.email ||
+            data.error.password ||
+            data.error.name ||
+            data.error.phone ||
+            'An unknown error occurred.';
 
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
           setError(errorMessage);
         } else {
           setError(data.error || 'An unknown error occurred.');
@@ -128,10 +95,6 @@ function AuthForm() {
       setError('Failed to process request');
     }
   };
-<<<<<<< HEAD
-  
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 
   const clearError = () => {
     const errorElement = document.querySelector('.error-message');
@@ -179,89 +142,87 @@ function AuthForm() {
   };
 
   return (
-    <div class="login-page">
-  <div class="login-component">
-    <div className="login-component">
-      <div className={`container ${isSignUp ? 'right-panel-active' : ''}`}>
-        <div className={`form-container ${isSignUp ? 'sign-up-container' : 'sign-in-container'}`}>
-          <form onSubmit={handleSubmit}>
-            <h1>{isSignUp ? 'Create Account' : 'Sign In'}</h1>
-            {isSignUp && (
-              <>
-                <input
-                  type="text"
-                  placeholder="Name"
-                  value={name}
-                  onChange={(event) => setName(event.target.value)}
-                  style={{ borderColor: fieldErrors.name ? 'red' : '' }}
-                />
-              </>
-            )}
-            <input
-              type="text"
-              placeholder="Email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              style={{ borderColor: fieldErrors.email ? 'red' : '' }}
-            />
-            <input
-              type="password"
-              placeholder="Password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              style={{ borderColor: fieldErrors.password ? 'red' : '' }}
-            />
-            {isSignUp && (
+    <div className="login-page">
+      <div className="login-component">
+        <div className={`container ${isSignUp ? 'right-panel-active' : ''}`}>
+          <div className={`form-container ${isSignUp ? 'sign-up-container' : 'sign-in-container'}`}>
+            <form onSubmit={handleSubmit}>
+              <h1>{isSignUp ? 'Create Account' : 'Sign In'}</h1>
+              {isSignUp && (
+                <>
+                  <input
+                    type="text"
+                    placeholder="Name"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                    style={{ borderColor: fieldErrors.name ? 'red' : '' }}
+                  />
+                </>
+              )}
               <input
                 type="text"
-                placeholder="Phone Number"
-                value={phone}
-                onChange={(event) => setPhone(event.target.value)}
-                style={{ borderColor: fieldErrors.phone ? 'red' : '' }}
+                placeholder="Email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+                style={{ borderColor: fieldErrors.email ? 'red' : '' }}
               />
-            )}
-            {isSignUp && (
-              <div className="file-upload">
-                <label htmlFor="imageUpload" className="file-upload-label">
-                  Upload Image (optional)
-                </label>
-                <input
-                  type="file"
-                  id="imageUpload"
-                  onChange={handleImageChange}
-                  className="file-upload-input"
-                />
-                <p className="image-name">{imageName}</p>
+              <input
+                type="password"
+                placeholder="Password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
+                style={{ borderColor: fieldErrors.password ? 'red' : '' }}
+              />
+              {isSignUp && (
+                <div className="phone-input-container">
+                  <span className="phone-prefix">+2189</span>
+                  <input
+                    type="text"
+                    placeholder="Phone Number  21234567.."
+                    value={phone}
+                    onChange={(event) => setPhone(event.target.value)}
+                    maxLength={8}
+                    style={{ borderColor: fieldErrors.phone ? 'red' : '' }}
+                  />
+                </div>
+              )}
+              {isSignUp && (
+                <div className="file-upload">
+                  <label htmlFor="imageUpload" className="file-upload-label">
+                    Upload Image (optional)
+                  </label>
+                  <input
+                    type="file"
+                    id="imageUpload"
+                    onChange={handleImageChange}
+                    className="file-upload-input"
+                  />
+                  <p className="image-name">{imageName}</p>
+                </div>
+              )}
+              {error && <p className={`error-message ${error ? 'show' : ''}`}>{error}</p>}
+              <button type="submit">{isSignUp ? 'Sign Up' : 'Sign In'}</button>
+            </form>
+          </div>
+          <div className="overlay-container">
+            <div className="overlay">
+              <div className="overlay-panel overlay-left">
+                <h1>Welcome Back!</h1>
+                <p>Access your account to manage your details.</p>
+                <button className="ghost" onClick={handleSignIn}>Sign In</button>
               </div>
-            )}
-            {error && <p className={`error-message ${error ? 'show' : ''}`}>{error}</p>}
-            <button type="submit">{isSignUp ? 'Sign Up' : 'Sign In'}</button>
-          </form>
-        </div>
-        <div className="overlay-container">
-          <div className="overlay">
-            <div className="overlay-panel overlay-left">
-              <h1>Welcome Back!</h1>
-              <p>Access your account to manage your details.</p>
-              <button className="ghost" onClick={handleSignIn}>Sign In</button>
-            </div>
-            <div className="overlay-panel overlay-right">
-              <h1>Join Us!</h1>
-              <p>Enter your details to start collaborating with us.</p>
-              <button className="ghost" onClick={handleSignUp}>Sign Up</button>
+              <div className="overlay-panel overlay-right">
+                <h1>Join Us!</h1>
+                <p>Enter your details to start collaborating with us.</p>
+                <button className="ghost" onClick={handleSignUp}>Sign Up</button>
+              </div>
             </div>
           </div>
+          {!error && token && <p className="success-message">Logged in successfully</p>}
         </div>
-        {!error && token && <p className="success-message">Logged in successfully</p>}
       </div>
-    </div>
-    </div>
     </div>
   );
 }
 
-<<<<<<< HEAD
 export default AuthForm;
-=======
-export default AuthForm;
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

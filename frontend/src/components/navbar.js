@@ -1,44 +1,94 @@
-<<<<<<< HEAD
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { jwtDecode } from 'jwt-decode'; // Correct import for jwt-decode
+import { jwtDecode } from 'jwt-decode'; // Fixed import
 import '../css/Navbar.css';
 import logo from '../css/vendor.jpg';
 import defaultImage from '../css/vendor.jpg';
-import { useOrderUpdate } from './OrderUpdateContext'; // Import the custom hook
+import { useOrderUpdate } from './OrderUpdateContext'; // Import the context
 
-const Navbar = ({ initialCartItems, onCartItemsChange, refreshCart }) => {
+const Navbar = ({ initialCartItems = [], onCartItemsChange, refreshCart }) => {
     const [userRole, setUserRole] = useState(null);
     const [isTransparent, setIsTransparent] = useState(false);
     const [cartDropdownVisible, setCartDropdownVisible] = useState(false);
-    const [cartItems, setCartItems] = useState(initialCartItems || []);
-    const [cart, setCart] = useState(initialCartItems || []);
+    const [cartItems, setCartItems] = useState(initialCartItems);
+    const [editedCartItems, setEditedCartItems] = useState([]);
+    const [cart, setCart] = useState({});
     const [cartDescription, setCartDescription] = useState('');
-    const [initialCartDescription, setInitialCartDescription] = useState(''); // State to store the initial description
+    const [initialCartDescription, setInitialCartDescription] = useState('');
     const [errorMessage, setErrorMessage] = useState(null);
-    const [removalErrorMessage, setRemovalErrorMessage] = useState(null);
-    const [successMessage, setSuccessMessage] = useState(null); // Success message state
+    const [successMessage, setSuccessMessage] = useState(null);
     const [totalPrice, setTotalPrice] = useState(0);
     const [totalQuantity, setTotalQuantity] = useState(0);
     const [loadingCartItems, setLoadingCartItems] = useState(false);
+    const [loadingDeleteItems, setLoadingDeleteItems] = useState({});
     const [loadingCheckout, setLoadingCheckout] = useState(false);
+    const [isQuantitySaved, setIsQuantitySaved] = useState(true);
     const navigate = useNavigate();
     const dropdownRef = useRef(null);
-    const { setShouldUpdateOrders } = useOrderUpdate(); // Use the context
+    const { setShouldUpdateOrders } = useOrderUpdate();
+    const [isSaving, setIsSaving] = useState(false);
+    const [initialQuantities, setInitialQuantities] = useState([]);
+    const [initialPrices, setInitialPrices] = useState([]);
+
+    // Timer to clear error/success message
+    const clearMessageAfterDelay = (type, delay = 5000) => {
+        setTimeout(() => {
+            if (type === 'error') {
+                setErrorMessage(null);
+            } else if (type === 'success') {
+                setSuccessMessage(null);
+            }
+        }, delay);
+    };
+
+    const fetchCartItems = useCallback(async () => {
+        const token = localStorage.getItem('token');
+        if (!token) return;
+
+        try {
+            setLoadingCartItems(true);
+            const [itemsResponse, cartResponse] = await Promise.all([
+                fetch('http://localhost:8080/cartitems', {
+                    headers: { Authorization: `Bearer ${token}` }
+                }),
+                fetch('http://localhost:8080/carts', {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
+            ]);
+
+            if (!itemsResponse.ok || !cartResponse.ok) {
+                const errorText = await itemsResponse.text();
+                throw new Error(errorText || 'You must have a table to checkout!');
+            }
+
+            const itemsData = await itemsResponse.json();
+            const cartData = await cartResponse.json();
+
+            const cartItemsData = itemsData.cart || [];
+            const cartDescription = cartData.cart?.description || '';
+            const cartTotalPrice = cartData.cart?.total_price || 0;
+            
+            setInitialQuantities(cartItemsData.map(item => item.quantity));
+            setInitialPrices(cartItemsData.map(item => item.price || 0));
+            setCartItems(cartItemsData);
+            setEditedCartItems(cartItemsData);
+            setCart(cartData);
+            setCartDescription(cartDescription);
+            setInitialCartDescription(cartDescription);
+            setTotalPrice(cartTotalPrice);
+            updateTotalQuantityAndPrice(cartItemsData);
+            setIsQuantitySaved(true);
+        } catch (error) {
+            setErrorMessage(error.message || 'Failed to fetch cart items.');
+            clearMessageAfterDelay('error');
+        } finally {
+            setLoadingCartItems(false);
+        }
+    }, []);
 
     useEffect(() => {
         fetchCartItems();
-    }, [refreshCart]);
-=======
-import React, { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode'; // Correct import
-import '../css/Navbar.css'; // For styling
-
-const Navbar = () => {
-    const [userRole, setUserRole] = useState(null);
-    const navigate = useNavigate();
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
+    }, [fetchCartItems, refreshCart]);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -47,15 +97,10 @@ const Navbar = () => {
                 const decodedToken = jwtDecode(token);
                 const currentTime = Date.now() / 1000;
                 if (decodedToken.exp < currentTime) {
-<<<<<<< HEAD
-=======
-                    // Token expired
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
                     localStorage.removeItem('token');
                     setUserRole(null);
                 } else {
                     setUserRole(decodedToken.userRole);
-<<<<<<< HEAD
                     fetchCartItems();
                 }
             } catch (error) {
@@ -64,7 +109,7 @@ const Navbar = () => {
                 setUserRole(null);
             }
         }
-    }, []);
+    }, [fetchCartItems]);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -86,172 +131,33 @@ const Navbar = () => {
         return () => document.removeEventListener('mousedown', handleClickOutside);
     }, []);
 
-    const fetchCartItems = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) return;
-
-        try {
-            const [itemsResponse, cartResponse] = await Promise.all([
-                fetch('http://localhost:8080/cartitems', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                }),
-                fetch('http://localhost:8080/carts', {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                })
-            ]);
-
-            if (!itemsResponse.ok || !cartResponse.ok) {
-                throw new Error('You must have a table to checkout!');
-            }
-
-            const itemsData = await itemsResponse.json();
-            setCartItems(itemsData.cart || []);
-
-            const cartData = await cartResponse.json();
-            setCart(cartData);
-            setCartDescription(cartData.cart?.description || ''); // Update cart description
-            setInitialCartDescription(cartData.cart?.description || ''); // Set the initial description
-            setTotalPrice(cartData.cart?.total_price || 0); // Update total price
-            setTotalQuantity(cartData.cart?.quantity || 0); // Update total quantity
-
-        } catch (error) {
-            console.error('Error fetching cart items:', error);
-        } finally {
-            setLoadingCartItems(false);
-        }
-    };
-
-    const deleteCart = async (id) => {
-        try {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                throw new Error('Token is missing');
-            }
-
-            const cartResponse = await fetch(`http://localhost:8080/carts/${id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!cartResponse.ok) {
-                const errorData = await cartResponse.json();
-                console.error('Error response from server:', errorData);
-                throw new Error(`Failed to delete cart: ${errorData.error.role || 'Unknown error'}`);
-            }
-
-            console.log('Cart deleted successfully');
-            setCartItems([]);
-            setTotalPrice(0);
-            setTotalQuantity(0);
-
-        } catch (error) {
-            console.error('Error deleting cart:', error);
-            setErrorMessage('Error deleting cart. Please try again.');
-        } finally {
-            setLoadingCartItems(false);
-        }
-    };
-
-=======
-                }
-            } catch (error) {
-                // Invalid token
-                localStorage.removeItem('token');
-                setUserRole(null);
-            }
-        } else {
-            setUserRole(null);
-        }
-    }, []);
-
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
     const handleSignOut = () => {
         localStorage.removeItem('token');
         setUserRole(null);
         navigate('/signin');
     };
 
-<<<<<<< HEAD
     const toggleCartDropdown = () => {
         setCartDropdownVisible(prev => !prev);
-        setErrorMessage(null);
-        setRemovalErrorMessage(null);
     };
 
     const handleCartDescriptionChange = (e) => {
         const value = e.target.value;
         if (value.length <= 100) {
             setCartDescription(value);
-            setErrorMessage(null); // Clear error if it's within the limit
+            setIsQuantitySaved(false);
+            setErrorMessage(null);
         } else {
             setErrorMessage('Description cannot exceed 100 characters.');
+            clearMessageAfterDelay('error');
         }
     };
-
-    const updateCartDescription = async () => {
-        if (cartDescription.length > 100) {
-            setErrorMessage('Description cannot exceed 100 characters.');
-            return; // Prevent updating if the description is too long
-        }
-
-        const token = localStorage.getItem('token');
-        try {
-            const response = await fetch(`http://localhost:8080/carts/${cart.cart.id}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: new URLSearchParams({
-                    description: cartDescription // Update only description
-                }).toString()
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            await fetchCartItems(); // Refresh cart items after updating description
-            setSuccessMessage('Cart updated successfully!'); // Set success message
-            setInitialCartDescription(cartDescription); // Update the initial description to the new one
-            setTimeout(() => setSuccessMessage(null), 3000); // Clear success message after 3 seconds
-
-        } catch (error) {
-            setErrorMessage('Error updating description. Please try again.');
-            console.error('Error updating cart description:', error);
-        }
-    };
-
-    const updateCartItemQuantity = async (itemId, newQuantity) => {
-        if (newQuantity < 1) return;
-
-        setErrorMessage(null);
-        try {
-            const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:8080/cartitems/${itemId}`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': `Bearer ${token}`
-                },
-                body: new URLSearchParams({ item_id: itemId, quantity: newQuantity }).toString()
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            await fetchCartItems();
-        } catch (error) {
-            setErrorMessage('Error updating quantity. Please try again.');
-            console.error('Error updating cart item:', error);
-        }
-    };
-
     const deleteCartItem = async (itemId) => {
+        if (!cart) return;
+    
+        // Set loading state for the item being deleted
+        setLoadingDeleteItems(prevState => ({ ...prevState, [itemId]: true }));
+    
         try {
             const token = localStorage.getItem('token');
             const response = await fetch(`http://localhost:8080/cartitems/${itemId}`, {
@@ -261,20 +167,153 @@ const Navbar = () => {
                     'Authorization': `Bearer ${token}`
                 }
             });
+    
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.errors ? JSON.stringify(errorData.errors) : 'Network response was not ok');
+            }
+    
+            // Successfully deleted, remove the item from the UI
+            setEditedCartItems(prevItems => {
+                // Filter out the deleted item
+                return prevItems.filter(item => item.item_id !== itemId);
+            });
+            
+            updateTotalQuantityAndPrice(editedCartItems.filter(item => item.item_id !== itemId));
+        } catch (error) {
+            console.error('Error deleting cart item:', error);
+            setErrorMessage('Error removing item. Please try again.');
+            clearMessageAfterDelay('error');
+        } finally {
+            // Remove loading state for the item
+            setLoadingDeleteItems(prevState => ({ ...prevState, [itemId]: false }));
+        }
+    };
+
+    const deleteCart = async (cartID) => {
+        setLoadingCartItems(true);
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`http://localhost:8080/carts/${cart.cart.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': `Bearer ${token}`
+                }
+            });
 
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const errorData = await response.json();
+                throw new Error(errorData.errors ? JSON.stringify(errorData.errors) : 'Network response was not ok');
             }
 
-            console.log('Item deleted successfully');
-            await fetchCartItems();
+            setCartItems([]);
+            setEditedCartItems([]);
+            setCartDescription('');
+            setInitialCartDescription('');
+            setTotalPrice(0);
+            setTotalQuantity(0);
+            setIsQuantitySaved(true);
+
+            console.log('Cart deleted successfully');
         } catch (error) {
-            setRemovalErrorMessage('Error removing item. Please try again.');
-            console.error('Error deleting cart item:', error);
+            console.error('Error deleting cart:', error);
+            setErrorMessage('Error removing cart. Please try again.');
+            clearMessageAfterDelay('error');
+        } finally {
+            setLoadingCartItems(false);
+        }
+    };
+
+    const updateCartItemQuantityLocally = (itemId, newQuantity) => {
+        if (newQuantity < 1) return;
+
+        const updatedItems = editedCartItems.map(item =>
+            item.item_id === itemId ? { ...item, quantity: newQuantity } : item
+        );
+        setEditedCartItems(updatedItems);
+        if (updatedItems.find(item => item.item_id === itemId).quantity === cartItems.find(item => item.item_id === itemId).quantity) {
+            setIsQuantitySaved(true);
+        } else {
+            setIsQuantitySaved(false);
+        }
+        updateTotalQuantityAndPrice(updatedItems);
+    };
+
+    const updateTotalQuantityAndPrice = (items) => {
+        const total = items.reduce((acc, item) => acc + item.quantity, 0);
+        const price = items.reduce((acc, item) => {
+            const itemPrice = item.discount || item.price || 0;
+            return acc + item.quantity * parseFloat(itemPrice);
+        }, 0);
+
+        setTotalQuantity(total);
+        setTotalPrice(price);
+    };
+
+    const saveCartChanges = async () => {
+        setLoadingCartItems(true);
+        setIsSaving(true);
+        try {
+            const token = localStorage.getItem('token');
+
+            const quantityPromises = editedCartItems.map(item =>
+                fetch(`http://localhost:8080/cartitems/${item.item_id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: new URLSearchParams({
+                        item_id: item.item_id,
+                        quantity: item.quantity
+                    }).toString()
+                })
+            );
+            const descriptionPromise = fetch(`http://localhost:8080/carts/${cart.cart.id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: new URLSearchParams({
+                    description: cartDescription
+                }).toString()
+            });
+
+            const responses = await Promise.all([...quantityPromises, descriptionPromise]);
+
+            for (const response of responses) {
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.errors ? JSON.stringify(errorData.errors.error) : 'Error while saving cart changes');
+                }
+            }
+
+            await fetchCartItems();
+
+            setIsQuantitySaved(true);
+            setSuccessMessage('Cart updated successfully!');
+            setErrorMessage(null);
+            clearMessageAfterDelay('success');
+        } catch (error) {
+            console.error('Error saving cart changes:', error);
+            setErrorMessage(error.message || 'An unknown error occurred');
+            setSuccessMessage(null);
+            clearMessageAfterDelay('error');
+        } finally {
+            setLoadingCartItems(false);
+            setIsSaving(false);
         }
     };
 
     const handleCheckout = async () => {
+        if (!isQuantitySaved) {
+            setErrorMessage('Please save your changes before checking out.');
+            clearMessageAfterDelay('error');
+            return;
+        }
+
         setLoadingCheckout(true);
         try {
             const token = localStorage.getItem('token');
@@ -290,14 +329,31 @@ const Navbar = () => {
 
             console.log('Checkout successful');
             setCartItems([]);
-            setShouldUpdateOrders(true); // Notify context that orders need to be updated
-            window.location.reload(); // Refresh the page
+            setShouldUpdateOrders(true);
+            window.location.reload();
         } catch (error) {
             console.error('Error during checkout:', error);
             setErrorMessage(error.message);
+            setSuccessMessage(null);
+            clearMessageAfterDelay('error');
         } finally {
             setLoadingCheckout(false);
         }
+    };
+
+    const handleDiscardChanges = () => {
+        const resetItems = editedCartItems.map((item, index) => ({
+            ...item,
+            quantity: initialQuantities[index]
+        }));
+        setTotalPrice(initialPrices.reduce((acc, price) => acc + price, 0));
+        setTotalQuantity(initialQuantities.reduce((acc, qty) => acc + qty, 0));
+        setEditedCartItems(resetItems);
+        setCartDescription(initialCartDescription);
+        setIsQuantitySaved(true);
+        setErrorMessage(null);
+        setSuccessMessage('Changes discarded.');
+        clearMessageAfterDelay('success');
     };
 
     return (
@@ -305,54 +361,64 @@ const Navbar = () => {
             <div className="logo">
                 <img src={logo} alt="Logo" />
             </div>
-=======
-    return (
-        <nav className="navbar">
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
             <ul className="center-links">
                 <li><Link to="/">Home</Link></li>
             </ul>
             <ul className="end-links">
                 {userRole === "1" && (
-<<<<<<< HEAD
                     <>
                         <li><Link to="/add-vendor">Add Vendor</Link></li>
                         <li><Link to="/users">Users</Link></li>
                     </>
-=======
-                    <li><Link to="/add-vendor">Add Vendor</Link></li>
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
                 )}
                 {userRole ? (
                     <>
                         <li><Link to="/profile">Profile</Link></li>
-<<<<<<< HEAD
                         <li><Link to="/orders">Orders</Link></li>
                         <li>
                             <button onClick={toggleCartDropdown} disabled={loadingCartItems}>
-                                {loadingCartItems ? 'Loading Cart...' : 'Cart'}
+                                {loadingCartItems ? 'Loading ...' : 'Cart'}
                             </button>
                             {cartDropdownVisible && (
                                 <div className="cart-dropdown" ref={dropdownRef}>
                                     {loadingCartItems ? (
-                                        <p>Loading cart items...</p>
+                                        <div className="spinner"></div>
                                     ) : cartItems.length === 0 ? (
                                         <p>No items in cart</p>
                                     ) : (
                                         <>
                                             <ul className="cart-list">
-                                                {cartItems.map(item => (
+                                                {editedCartItems.map(item => (
                                                     <li key={item.item_id} className="cart-item">
                                                         <div className="cart-item-img">
-                                                            <img src={item.img || defaultImage} alt={item.name} />
+                                                            <img
+                                                                src={item.img || defaultImage}
+                                                                alt={item.name}
+                                                                onError={(e) => (e.target.src = defaultImage)}
+                                                            />
                                                         </div>
                                                         <div className="cart-item-name">{item.name}</div>
                                                         <div className="cart-item-quantity">
-                                                            <button onClick={() => updateCartItemQuantity(item.item_id, item.quantity - 1)}>-</button>
+                                                            <button
+                                                                onClick={() =>
+                                                                    updateCartItemQuantityLocally(item.item_id, item.quantity - 1)
+                                                                }
+                                                            >
+                                                                -
+                                                            </button>
                                                             <span>{item.quantity}</span>
-                                                            <button onClick={() => updateCartItemQuantity(item.item_id, item.quantity + 1)}>+</button>
+                                                            <button
+                                                                onClick={() =>
+                                                                    updateCartItemQuantityLocally(item.item_id, item.quantity + 1)
+                                                                }
+                                                            >
+                                                                +
+                                                            </button>
                                                         </div>
-                                                        <button onClick={() => deleteCartItem(item.item_id)} className='removebutton'>Remove</button>
+                                                        <button onClick={() => deleteCartItem(item.item_id)} className="removebutton">
+                                                            Remove
+                                                        </button>
+                                                        {loadingDeleteItems[item.item_id] && <div className="spinner"></div>}
                                                     </li>
                                                 ))}
                                             </ul>
@@ -362,53 +428,58 @@ const Navbar = () => {
                                             </div>
                                         </>
                                     )}
-                                                                    {totalQuantity > 0 && (
 
-                                    <div className="cart-description">
-                                        <textarea
-                                            value={cartDescription}
-                                            onChange={handleCartDescriptionChange}
-                                            placeholder="Write a description for your cart..."
-                                            rows="3"
-                                            maxLength="100"
-                                        />
-                                        <p>{cartDescription.length}/100</p> {/* Character count */}
-                                    </div>
-                                                                    )}
-                                    {errorMessage && <p className="error-message">{errorMessage}</p>}
-                                    {successMessage && <p className="success-message">{successMessage}</p>}
-                                    {removalErrorMessage && <p className="error-message">{removalErrorMessage}</p>}
-                                    
-                                    {/* Show Save button only if the cart description has changed */}
-                                    {cartDescription !== initialCartDescription && (
-                                        <button onClick={updateCartDescription} disabled={loadingCartItems}>
-                                            Save
+                                    {cartItems.length !== 0 && (
+                                        <div className="cart-description">
+                                            <textarea
+                                                value={cartDescription}
+                                                onChange={handleCartDescriptionChange}
+                                                placeholder="Write a note for your order..."
+                                                rows="3"
+                                                maxLength="100"
+                                            />
+                                            <p>{cartDescription.length}/100</p>
+                                        </div>
+                                    )}
+
+                                    {/** Show "Delete Cart" button only if the cart has items */}
+                                    {cartItems.length > 0 && cart && cart.cart?.id && (
+                                        <button onClick={() => deleteCart(cart.cart.id)}>
+                                            Delete Cart
                                         </button>
                                     )}
 
-                                    <button onClick={handleCheckout} disabled={loadingCheckout}>
-                                        {loadingCheckout ? 'Processing Checkout...' : 'Checkout'}
-                                    </button>
-                                    <button onClick={() => deleteCart(cart.cart.id)} disabled={loadingCartItems} className='removebutton'>
-                                        Delete Cart
-                                    </button>
+                                    {!loadingCheckout && totalQuantity > 0 && !isQuantitySaved && (
+                                        <>
+                                            <button onClick={saveCartChanges} disabled={isSaving}>
+                                                {isSaving ? 'Saving...' : 'Save'}
+                                            </button>
+                                            <button onClick={handleDiscardChanges}>Discard Changes</button>
+                                        </>
+                                    )}
+
+                                    {isQuantitySaved && (
+                                        <button onClick={handleCheckout} disabled={loadingCheckout}>
+                                            {loadingCheckout ? 'Processing Checkout...' : 'Checkout'}
+                                        </button>
+                                    )}
+                                    {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
+                                    {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
                                 </div>
                             )}
                         </li>
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
-                        <li><button onClick={handleSignOut}>Sign Out</button></li>
+                        <li>
+                            <button onClick={handleSignOut}>Sign Out</button>
+                        </li>
                     </>
                 ) : (
-                    <li><Link to="/signin">Sign In</Link></li>
+                    <li>
+                        <Link to="/signin">Sign In</Link>
+                    </li>
                 )}
             </ul>
         </nav>
     );
 };
 
-<<<<<<< HEAD
 export default Navbar;
-=======
-export default Navbar;
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

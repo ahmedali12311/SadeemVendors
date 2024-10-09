@@ -20,7 +20,7 @@ const UsersPage = () => {
       setLoading(true);
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:8080/users?page=${page}&pageSize=${pageSize}&sortColumn=${sortOrder.split('_')[0]}&sortDirection=${sortOrder.split('_')[1]}`, {
+        const response = await fetch(`https://backend-934694036821.europe-west1.run.app/users?page=${page}&pageSize=${pageSize}&sortColumn=${sortOrder.split('_')[0]}&sortDirection=${sortOrder.split('_')[1]}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -76,17 +76,10 @@ const UsersPage = () => {
     navigate(`/users/edit/${userId}`);
   };
 
-<<<<<<< HEAD
 
-  if (loading) return <div>Loading...</div>;
+
   if (error) return <div>Error: {error}</div>;
 
-=======
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
-
-  console.log('Users state:', users); // Log the users state
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 
   return (
     <div className="user-list-container">
@@ -99,7 +92,6 @@ const UsersPage = () => {
           value={searchTerm}
           onChange={handleSearchChange}
         />
-<<<<<<< HEAD
     {searchTerm && (
   <ul className="dropdown-menu">
     {dropdownResults.length > 0 ? (
@@ -123,24 +115,6 @@ const UsersPage = () => {
     )}
   </ul>
 )}
-=======
-        {searchTerm && (
-          <ul className="dropdown-menu">
-            {dropdownResults.length > 0 ? (
-              dropdownResults.map(user => (
-                <li 
-                  key={user.id} 
-                  onClick={() => handleSearchResultClick(user.id)} // Navigate on click
-                >
-                  {user.name}
-                </li>
-              ))
-            ) : (
-              <li>No results found</li>
-            )}
-          </ul>
-        )}
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
       </div>
       <div className="sort-selection">
         <select value={sortOrder} onChange={handleSortChange}>
@@ -191,7 +165,8 @@ const UsersPage = () => {
           Next
         </button>
       </div>
-    </div>
+      {loading && <div className="spinner"></div>}
+      </div>
   );
 };
 

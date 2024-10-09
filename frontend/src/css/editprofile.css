@@ -1,13 +1,9 @@
 /* editprofile.css */
-<<<<<<< HEAD
 body{
 
   background: linear-gradient(to bottom right, #e0f7fa, #E5F2F7);
 
 }
-=======
-
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 .profile-container {
   display: flex;
   flex-direction: row;
@@ -200,11 +196,7 @@ form {
   align-items: center;
   background-color: #f0f0f0; /* Light background for no image */
   box-shadow: 0 10px 8px rgba(1, 1, 1, 0.1); /* Shadow for depth */
-<<<<<<< HEAD
   transition: transform 0.5s ease-in-out, box-shadow 0.7s; /* Existing transition */
-=======
-  transition: transform 0.5s ease-in-out, box-shadow 0.7s;
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 
 .profile-image-container:hover {
@@ -216,19 +208,12 @@ form {
   width: 100%;
   height: 100%;
   object-fit: cover;
-<<<<<<< HEAD
   transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth transition for opacity and scale */
-=======
-  transition: opacity 0.5s ease;
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 
 .profile-image-container:hover .profile-image {
   opacity: 0.1; /* Make image semi-transparent on hover */
-<<<<<<< HEAD
   transform: scale(1.05); /* Optionally scale the image slightly on hover */
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 
 .profile-image-container::before {
@@ -239,20 +224,12 @@ form {
   width: 50%; /* Adjust size as needed */
   height: 50%; /* Adjust size as needed */
   opacity: 0;
-<<<<<<< HEAD
   transition: opacity 0.3s ease-in; /* Smooth transition */
-=======
-  transition: opacity 0.3s  ease-in;
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 
 .profile-image-container:hover::before {
   opacity: 1;
-<<<<<<< HEAD
   transition: opacity 0.31s ease-in; /* Smooth transition for icon */
-=======
-  transition: opacity 0.31s ease-in;
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 /* Existing styles */
 
@@ -343,10 +320,6 @@ form {
   background-color: #ddd;
 
   border: 1px solid #ddd; /* Lighter border */
-<<<<<<< HEAD
-=======
-
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
   border-radius: 8px; /* More rounded corners */
   padding: 14px; /* Slightly more padding */
   font-size: 16px;
@@ -380,4 +353,54 @@ form {
   color: red;
   font-size: 12px;
   margin-top: 5px;
+}
+.phone-input-wrapper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #E5F2F7; /* Match the input border color */
+  border-radius: 0 4px 4px 0; /* Round only the right side */
+  overflow: hidden; /* Prevents overflow of inner elements */
+  transition: border-color 0.3s ease; /* Smooth transition for border on hover */
+}
+
+/* Styles for the phone prefix */
+.phone-prefix {
+  padding: 12px; /* Adjust padding as needed */
+  background-color: #ddd; /* Light background for prefix */
+  border-right: 1px solid #E5F2F7; /* Border between prefix and input */
+  color: #555; /* Text color for the prefix */
+  font-weight: bold; /* Bold font for prefix */
+  display: flex;
+  align-items: center; /* Center icon vertically */
+}
+
+/* Icon styles */
+.phone-prefix::after {
+  margin-left: 5px; /* Space between prefix text and icon */
+  opacity: 0.5; /* Disabled effect */
+}
+
+/* Styles for the input */
+.phone-input-wrapper input {
+  border: none; /* Remove the input border */
+  outline: none; /* Remove outline on focus */
+  padding: 12px; /* Ensure padding matches prefix */
+  flex: 1; /* Allow input to take available space */
+  background-color: #fff; /* White background for input */
+}
+
+/* Placeholder style */
+.phone-input-wrapper input::placeholder {
+  color: #aaa; /* Lighter placeholder color */
+}
+
+/* Focus state for input */
+.phone-input-wrapper input:focus {
+  border-color: #3498db; /* Border color on focus */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); /* Shadow on focus */
+}
+
+/* Hover state for the entire phone input wrapper */
+.phone-input-wrapper:hover {
+  border-color: #3498db; /* Change border color on hover */
 }

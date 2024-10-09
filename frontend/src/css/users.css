@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 /* Container for the user list */
 .user-list-container {
   padding: 20px;
@@ -7,22 +5,6 @@
   box-sizing: border-box; /* Includes padding and border in width and height */
   overflow: auto; /* Allows scrolling if content overflows */
   margin-top: 50px;
-=======
-/* Ensure body and html are full height */
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
-/* Container for the user list */
-.user-list-container {
-  width: 100%; /* Ensures full width */
-  height: 100vh; /* Full viewport height */
-  padding: 20px;
-  background-color: #E5F2F7; /* Background color */
-  box-sizing: border-box; /* Includes padding and border in width and height */
-  overflow: auto; /* Allows scrolling if content overflows */
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 
 /* Title Styles */
@@ -83,7 +65,6 @@ html, body {
 
 .user-list-container .dropdown-menu li {
   padding: 8px 12px;
-<<<<<<< HEAD
   border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s ease-in-out, border-radius 0.3s ease-in-out;
@@ -93,16 +74,6 @@ html, body {
   background-color: #ffffff;
   border-radius: 10px;
   color: red;
-  
-=======
-  border-bottom: 1px solid #ddd;
-  cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
-}
-
-.user-list-container .dropdown-menu li:hover {
-  background-color: #f1f1f1;
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
 }
 
 .user-list-container .search-input:focus + .dropdown-menu,
@@ -155,7 +126,6 @@ html, body {
   display: flex;
   flex-direction: column;
   align-items: center;
-
 }
 
 .user-list-container .user-card:hover {
@@ -163,7 +133,7 @@ html, body {
 }
 
 .user-list-container .user-card .user-image-container {
-margin-top: 10%;
+  margin-top: 10%;
   width: 100%; /* Full width */
   height: 150px; /* Adjust height as needed */
   border-radius: 10%;
@@ -235,7 +205,7 @@ margin-top: 10%;
 .pagination button:hover {
   background-color: #f1f1f1;
 }
-<<<<<<< HEAD
+
 .dropdown-menu {
   list-style-type: none;
   padding: 0;
@@ -264,5 +234,52 @@ margin-top: 10%;
   border-radius: 50%; /* Optional: make it circular */
   margin-right: 10px; /* Space between image and text */
 }
-=======
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
+
+/* Responsive Styles */
+
+/* For screens with a maximum width of 1200px */
+@media (max-width: 1200px) {
+  .user-list-container .user-card {
+    width: 25%;
+  }
+}
+
+/* For screens with a maximum width of 992px */
+@media (max-width: 992px) {
+  .user-list-container .user-card {
+    width: 33.33%;
+  }
+}
+
+/* For screens with a maximum width of 768px */
+@media (max-width: 768px) {
+  .user-list-container .user-card {
+    width: 50%;
+  }
+}
+
+/* For screens with a maximum width of 576px */
+@media (max-width: 576px) {
+  .user-list-container .user-card {
+    width: 100%;
+  }
+  .user-list-container .search-input {
+    width: 100%;
+  }
+  .user-list-container .sort-selection select {
+    width: 100%;
+  }
+  .pagination button {
+    padding: 8px 12px;
+  }
+}
+
+/* For screens with a maximum width of 480px */
+@media (max-width: 480px) {
+  .user-list-container .title {
+    font-size: 18px;
+  }
+  .user-list-container .user-name {
+    font-size: 1em;
+  }
+}

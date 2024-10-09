@@ -33,7 +33,7 @@ const Sidebar = () => {
     const fetchUserRole = async () => {
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:8080/me', {
+        const response = await fetch('https://backend-934694036821.europe-west1.run.app/me', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -41,10 +41,10 @@ const Sidebar = () => {
 
         if (!response.ok) {
           if (response.status === 401) {
-            // Handle unauthorized access
+            console.log("You don't have access!")
             return;
           }
-          throw new Error(`HTTP error! status: ${response.status}`);
+          throw new Error(`https error! status: ${response.status}`);
         }
 
         const data = await response.json();

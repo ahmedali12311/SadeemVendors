@@ -6,8 +6,11 @@ const Orders = () => {
     const [error, setError] = useState(null);
     const [successMessage, setSuccessMessage] = useState(null);
     const [userRole, setUserRole] = useState(null);
-    
+    const [loading, setLoading] = useState(false);
+    const [loadingOrderId, setLoadingOrderId] = useState(null); // Track loading for specific order
+
     const fetchOrders = useCallback(async () => {
+        setLoading(true);
         try {
             const token = localStorage.getItem('token');
             if (!token) {
@@ -17,52 +20,38 @@ const Orders = () => {
             const decodedToken = JSON.parse(atob(token.split('.')[1]));
             const role = decodedToken.userRole;
             const userId = decodedToken.id;
-    
-            console.log('Decoded Token:', decodedToken); // Log token data
-            console.log('Role:', role);
-            console.log('User ID:', userId);
-    
+
             setUserRole(role);
     
             let url = '/orders';
     
             if (role === '2') {
-                // Role '2' indicates vendor owner: fetch vendor ID first
                 const vendorResponse = await fetch(`http://localhost:8080/uservendors/${userId}`, {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-    
-                console.log('Vendor Response Status:', vendorResponse.status); // Log vendor response status
-    
+
                 if (!vendorResponse.ok) {
                     throw new Error(`Failed to fetch vendor ID: ${vendorResponse.statusText}`);
                 }
     
                 const vendorData = await vendorResponse.json();
-                console.log('Vendor Data:', vendorData); // Log vendor data
-    
-                const vendor = vendorData.vendor[0]; // Access the first vendor in the array
-                const vendorId = vendor?.id; // Safely access the id
+                const vendor = vendorData.vendor[0];
+                const vendorId = vendor?.id;
     
                 if (!vendorId) {
                     throw new Error('Vendor ID is undefined');
                 }
     
-                // Include the vendor ID in the request to /orders endpoint
                 url = `/vendororders/${vendorId}`;
             }
-    
-            console.log(`Fetching orders from: ${url}`); // Log final URL
     
             const response = await fetch(`http://localhost:8080${url}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
             });
-    
-            console.log(`Orders Response Status: ${response.status}`); // Log orders response status
     
             if (!response.ok) {
                 const errorData = await response.json();
@@ -71,28 +60,29 @@ const Orders = () => {
             }
     
             const data = await response.json();
-            console.log('Fetched orders:', data); // Log fetched orders
             setOrders(data.orders || []);
         } catch (error) {
             console.error('Error fetching orders:', error);
+        } finally {
+            setLoading(false);
         }
     }, []);
     
-    
     useEffect(() => {
         fetchOrders(); // Call fetchOrders on component mount
-    }, [fetchOrders]); // Adding fetchOrders to dependency array
+    }, [fetchOrders]);
     
     const handleCompleteOrder = async (orderId) => {
+        setLoadingOrderId(orderId); // Set loading for specific order
         try {
             const response = await fetch(`http://localhost:8080/orderscompleted/${orderId}`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`,
-                    'Content-Type': 'application/x-www-form-urlencoded' // Set Content-Type for form-urlencoded
+                    'Content-Type': 'application/x-www-form-urlencoded'
                 },
                 body: new URLSearchParams({
-                    status: 'completed' // Format body as URLSearchParams
+                    status: 'completed'
                 })
             });
     
@@ -100,12 +90,13 @@ const Orders = () => {
                 throw new Error('Network response was not ok');
             }
     
-            // Refresh the orders after updating
             await fetchOrders();
             setSuccessMessage('Order has been marked as completed!');
         } catch (error) {
             setError('Error updating order status. Please try again.');
             console.error('Error updating order status:', error);
+        } finally {
+            setLoadingOrderId(null); // Reset loading state for the order
         }
     };
     
@@ -136,8 +127,9 @@ const Orders = () => {
                             </div>
                             {userRole === '2' && order.status !== 'completed' && (
                                 <div className="user-data">
-                                    <div className='user-Section'>                                    <strong>User Info:</strong>
-                                   </div>
+                                    <div className='user-Section'>
+                                        <strong>User Info:</strong>
+                                    </div>
                                     <div>📞 {order.CustomerPhone}</div>
                                     <div>👤 {order.user_name}</div>
                                 </div>
@@ -148,29 +140,28 @@ const Orders = () => {
                                     {order.item_names && order.item_names.map((item, index) => (
                                         <li key={index} className="order-item-details">
                                             <span className="item-name">{item}</span>
-                                            <span className="item-prices"> ${order.item_prices[index].toFixed(2)}</span>
+                                            <span className="item-prices">${order.item_prices[index].toFixed(2)}</span>
                                             <span className="item-quantitys">Qty: {order.item_quantities[index]}</span>
-                                            <span className="item-prices">Total Price ${order.item_prices[index]*order.item_quantities[index].toFixed(2)}</span>
-
-
+                                            <span className="item-prices">Total Price ${order.item_prices[index] * order.item_quantities[index].toFixed(2)}</span>
                                         </li>
                                     ))}
                                 </ul>
                             </div>
                             {order.description && (
-    <div className="order-description">
-        <strong>Description : </strong>
-        <span>{order.description}</span>
-    </div>
+                                <div className="order-description">
+                                    <strong>Description : </strong>
+                                    <span>{order.description}</span>
+                                </div>
                             )}
                             {userRole === '2' && order.status !== 'completed' && (
-                                <button onClick={() => handleCompleteOrder(order.id)} className="complete-button">
-                                    ✔️ Mark as Completed
+                                <button onClick={() => handleCompleteOrder(order.id)} className="complete-button" disabled={loadingOrderId === order.id}>
+                                    {loadingOrderId === order.id ? 'Loading...' : '✔️ Mark as Completed'}
                                 </button>
                             )}
                         </div>
                     ))}
                 </div>
+                {loading && <div className="spinner"></div>}
             </div>
         </div>
     );

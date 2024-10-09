@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams,  } from 'react-router-dom';
@@ -15,6 +14,11 @@ function VendorDetails({ onAddToCart }) {
   const [vendor, setVendor] = useState(null);
   const [admins, setAdmins] = useState([]);
   const [tables, setTables] = useState([]);
+  const [showAddTableInput, setShowAddTableInput] = useState(false);
+  const [newTableName, setNewTableName] = useState('');
+  const [isEditingTable, setIsEditingTable] = useState(false);
+  const [editingTableId, setEditingTableId] = useState(null);
+  const [editTableName, setEditTableName] = useState('');
   const [items, setItems] = useState([]);
   const [newAdminEmail, setNewAdminEmail] = useState('');
   const [error, setError] = useState(null);
@@ -24,8 +28,8 @@ function VendorDetails({ onAddToCart }) {
   const [userRole, setUserRole] = useState(null);
   const imageRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState(null);
-  const [showAddTableInput, setShowAddTableInput] = useState(false);
-  const [newTableName, setNewTableName] = useState('');
+  const [Addloading, setAddLoading] = useState({});
+
   const [setErrorTimeout] = useState(null);
   const [newItemName, setNewItemName] = useState('');
   const [newItemPrice, setNewItemPrice] = useState('');
@@ -33,10 +37,9 @@ function VendorDetails({ onAddToCart }) {
   const [editItemName, setEditItemName] = useState('');
   const [editItemPrice, setEditItemPrice] = useState('');
   const [editItemImage, setEditItemImage] = useState('');
-  const [isEditingTable, setIsEditingTable] = useState(false);
-  const [editingTableId, setEditingTableId] = useState(null);
+
+
   const [sortOrder,setSortOrder] = useState('created_at'); // Adjust as needed
-  const [editTableName, setEditTableName] = useState('');
   const [preview, setPreview] = useState('');
   const [showAddItemInput, setShowAddItemInput] = useState(false);
   const firstItemRef = useRef(null);
@@ -83,7 +86,7 @@ const handleAnimationEnd = () => {
   };
   const handleAddToCart = async (item) => {
     const token = localStorage.getItem('token');
-    
+
     // Get the quantity for the specific item, default to 1 if invalid
     let quantity = itemQuantities[item.id];
     if (isNaN(quantity) || quantity < 1) {
@@ -93,6 +96,8 @@ const handleAnimationEnd = () => {
         [item.id]: quantity, // Update the state with the default quantity
       }));
     }
+
+    setAddLoading(prevState => ({ ...prevState, [item.id]: true }));
   
     try {
       const response = await fetch('http://localhost:8080/cartitems', {
@@ -111,7 +116,7 @@ const handleAnimationEnd = () => {
         const errorData = await response.json();
         setItemMessages(prevMessages => ({
           ...prevMessages,
-          [item.id]: `Failed to add item to cart: ${errorData.error || 'Unknown error'}`,
+          [item.id]: ` ${errorData.error || 'Failed to add item to cart'}`,
         }));
         setTimeout(() => {
           setItemMessages(prevMessages => ({
@@ -137,7 +142,7 @@ const handleAnimationEnd = () => {
     } catch (error) {
       setItemMessages(prevMessages => ({
         ...prevMessages,
-        [item.id]: `Error: ${error.message || 'An unknown error occurred while adding to cart.'}`,
+        [item.id]: `${error.message || 'An unknown error occurred while adding to cart.'}`,
       }));
       setTimeout(() => {
         setItemMessages(prevMessages => ({
@@ -145,6 +150,8 @@ const handleAnimationEnd = () => {
           [item.id]: ''
         }));
       }, MESSAGE_DURATION);
+    }finally{
+      setAddLoading(prevState => ({ ...prevState, [item.id]: false }));
     }
   };
   
@@ -167,61 +174,10 @@ const handleErrorMessageTimeout = () => {
         const token = localStorage.getItem('token');
         try {
           const response = await fetch(`http://localhost:8080/vendor/${id}/items?page=${currentPage}&page_size=${itemsPerPage}`, {
-=======
-import React, { useState, useEffect, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import '../css/vendordetails.css';
-import defaultimage from './vendor.jpg';
-
-function VendorDetails() {
-  const { id } = useParams();
-  const navigate = useNavigate();
-  const [vendor, setVendor] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [userRole, setUserRole] = useState(null);
-  const imageRef = useRef(null);
-
-  useEffect(() => {
-    const fetchVendorDetails = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/vendors/${id}`);
-        
-        if (!response.ok) {
-          if (response.status === 401) {
-            setError('Unauthorized access. You will be redirected to the sign-in page.');
-            setTimeout(() => navigate('/signin'), 3000); // Delay navigation by 3 seconds
-            return;
-          }
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        if (data && data.vendor) {
-          setVendor(data.vendor);
-        } else {
-          throw new Error('Vendor data is undefined or null');
-        }
-      } catch (error) {
-        console.error('Error fetching vendor details:', error);
-        setError('Failed to load vendor details');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    const fetchUserRole = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (token) {
-          const response = await fetch('http://localhost:8080/me', {
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-<<<<<<< HEAD
       
           if (!response.ok) {
             throw new Error('Failed to fetch items');
@@ -441,6 +397,12 @@ const fetchTotalItemsCount = useCallback(async () => {
 
       if (!response.ok) {
         const errorData = await response.json();
+        if (response.status === 401) {
+          // Handle the 401 error here
+          setError('You are not authorized to view this page');
+        } else {
+          throw new Error('Failed to fetch admins');
+        }
         const errorMessage = errorData.error || 'Failed to fetch vendor admins';
         setError(errorMessage);
         return;
@@ -469,7 +431,6 @@ const fetchTotalItemsCount = useCallback(async () => {
       }
 
       const data = await response.json();
-      console.log(data)
 
       setTables(data.tables || []);
     } catch (error) {
@@ -539,15 +500,12 @@ useEffect(() => {
       }
     };
     fetchData();
-  }, [fetchVendorDetails, fetchUserRole, fetchVendorAdmins, fetchVendorTables, fetchVendorItems, fetchUserTables, fetchUserOrders, fetchTotalItemsCount]);
+  }, [fetchVendorDetails, fetchUserRole, fetchVendorAdmins, fetchUserTables,fetchVendorItems, fetchVendorTables,fetchUserOrders, fetchTotalItemsCount]);
+
 
 useEffect(() => {
   const totalPages = Math.ceil(totalItemsCount / itemsPerPage);
-  console.log(`Total pages: ${totalPages}`);
-}, [totalItemsCount, itemsPerPage]);
-useEffect(() => {
-  const totalPages = Math.ceil(totalItemsCount / itemsPerPage);
-  console.log(`Total pages: ${totalPages}`);
+  console.log(totalPages)
 }, [totalItemsCount, itemsPerPage]);
 const handleImageHover = () => {
   if (imageRef.current) {
@@ -634,10 +592,8 @@ const handleAddAdmin = async () => {
   
     try {
       const token = localStorage.getItem('token');
-      console.log('Token:', token);
   
       const body = new URLSearchParams({ quantity: editItemQuantity }).toString();
-      console.log('Request Body:', body);
   
       const response = await fetch(`http://localhost:8080/vendor/${id}/items/${editingItemId}`, {
         method: 'PUT',
@@ -648,11 +604,9 @@ const handleAddAdmin = async () => {
         body: body,
       });
   
-      console.log('Response Status:', response.status);
   
       if (!response.ok) {
         const errorData = await response.json();
-        console.log('Error Data:', errorData);
         setItemQuantityError(errorData.error?.quantity || '');
         return;
       }
@@ -692,9 +646,6 @@ const handleAddAdmin = async () => {
 
 
 
-  if (loading) {
-    return <div  className="spinner"></div>;
-  }
   const handleAddTable = async () => {
     if (!newTableName) return;
 
@@ -1261,6 +1212,7 @@ const handleUpdateTable = async () => {
         </button>
       </div>
     </div>
+    
  {/* Tables Section */}
 <div className="tables-section card">
 {(userRole === '1' || (userRole === '2' && isCurrentUserAdmin)) && (
@@ -1296,8 +1248,14 @@ const handleUpdateTable = async () => {
     {tables.map((table) => (
       <div key={table.id} className="table-card">
         <h3 className="table-name">{table.name}</h3>
-        <p>Available: {table.is_available ? 'Yes' : 'No'}</p>
-        <p>Needs Service: {table.is_needs_service ? 'Yes' : 'No'}</p>
+        <p>
+  {table.is_available ? 
+    <span style={{ color: 'green' }}>&#9989;</span> : 
+    <span style={{ color: 'red' }}>&#10060;</span>
+  }
+</p> 
+
+       <p>Needs Service: {table.is_needs_service ? 'Yes' : 'No'}</p>
 
         <div className="table-actions">
           {table.customer_id === currentUserId && !table.is_available && (
@@ -1354,11 +1312,11 @@ const handleUpdateTable = async () => {
           )}
         </div>
       </div>
-    ))}
-  </div>
+   ))}
+ </div>
 
 
-{/* Full-Screen Edit Form for Tables */}
+{/* Full-Screen Edit Form for Tables*/}
 {isEditingTable && (
     <div className="edit-table-modal">
         <div className="modal-overlay" onClick={() => setIsEditingTable(false)}></div>
@@ -1379,7 +1337,7 @@ const handleUpdateTable = async () => {
             </form>
         </div>
     </div>
-)}
+)} 
 
 {error && error.includes('table') && (
     <div className="error-message">{error}</div>
@@ -1551,6 +1509,8 @@ const handleUpdateTable = async () => {
     <button onClick={() => handleQuantityChange(item.id, 1)}>+</button>
     <div>
       <button onClick={() => handleAddToCart(item)}>Add to cart</button>
+      {Addloading[item.id] && <div className="spinner"></div>}
+
     </div>
   </div>
   )
@@ -1808,106 +1768,12 @@ Edit Quantity
           )}
   </div>
 )}
-
+      {loading && <div className="spinner"></div>}
+</div>
         </div>
       </div>
-      {loading && <div className="spinner"></div>}
 
-      </div>
 );
 }
 
 export default VendorDetails;
-=======
-
-          if (!response.ok) {
-            if (response.status === 401) {
-              setError('Unauthorized access. You will be redirected to the sign-in page.');
-              setTimeout(() => navigate('/signin'), 3000); // Delay navigation by 3 seconds
-              return;
-            }
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          const data = await response.json();
-          setUserRole(data.me.user_role);
-        }
-      } catch (error) {
-        console.error('Error fetching user role:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchVendorDetails();
-    fetchUserRole();
-  }, [id, navigate]);
-
-  const handleEditClick = () => {
-    navigate(`/edit-vendor/${id}`);
-  };
-
-  const handleImageHover = () => {
-    if (imageRef.current) {
-      imageRef.current.style.cursor = 'pointer';
-    }
-  };
-
-  const handleImageLeave = () => {
-    if (imageRef.current) {
-      imageRef.current.style.cursor = 'default';
-    }
-  };
-
-  const handleImageError = (e) => {
-    e.target.src = defaultimage;
-  };
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return (
-      <div className="error-overlay">
-        <div className="error-box">
-          {error}
-        </div>
-      </div>
-    );
-  }
-
-  if (!vendor) {
-    return <div>No vendor details available</div>;
-  }
-
-  return (
-    <div className="page-container">
-      <div className="vendor-details-container">
-        <div className="vendor-image-container">
-          <img
-            src={vendor.img || defaultimage}  // Use vendor's image or default image
-            alt={vendor.name || 'Vendor'}
-            className="vendor-image"
-            ref={imageRef}
-            onMouseOver={handleImageHover}
-            onMouseOut={handleImageLeave}
-            onError={handleImageError}  // Handle image load error
-          />
-        </div>
-        <div className="vendor-info-container">
-          <h1 className="vendor-name">{vendor.name}</h1>
-          <p className="vendor-description">{vendor.description || 'No description available'}</p>
-          {userRole === '1' && (
-            <button className="edit-button" onClick={handleEditClick}>
-              Edit Vendor
-            </button>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default VendorDetails;
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c

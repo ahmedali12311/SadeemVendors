@@ -22,6 +22,7 @@ function EditProfile() {
   const [success, setSuccess] = useState(null);
   const imageRef = useRef(null);
   const userId = localStorage.getItem('userId');
+  const phonePrefix = '+2189';
 
   useEffect(() => {
     const fetchUserDetails = async () => {
@@ -32,14 +33,14 @@ function EditProfile() {
           throw new Error('No token found');
         }
 
-        const response = await fetch('http://localhost:8080/me', {
+        const response = await fetch('https://backend-934694036821.europe-west1.run.app/me', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
         if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
+          throw new Error(`https error! Status: ${response.status}`);
         }
 
         const data = await response.json();
@@ -49,7 +50,7 @@ function EditProfile() {
           const { name, email, phone, img } = data.me.user_info;
           setName(name || '');
           setEmail(email || '');
-          setPhone(phone || '');
+          setPhone(phone ? phone.slice(phonePrefix.length) : '');
           setPreview(img || defaultImage);
 
           localStorage.setItem('userId', data.me.user_info.id);
@@ -67,51 +68,46 @@ function EditProfile() {
 
     fetchUserDetails();
   }, []);
+
   const handleImageClick = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // Check if the file is an image
       const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
       if (!validTypes.includes(file.type)) {
         setErrorMessages(prev => ({
           ...prev,
           image: 'Invalid image type. Please upload a JPEG, PNG, GIF, or WEBP image.'
         }));
-        
-        // Do not clear the current image or preview
+
         setImage(null);
         setPreview(prev => prev || defaultImage);
-  
-        // Hide the error message after 3 seconds
+
         setTimeout(() => {
           setErrorMessages(prev => ({ ...prev, image: '' }));
         }, 10000);
-  
+
         return;
       }
-  
-      // Check if the image size is valid
+
       if (file.size > 2000000) { // 2MB
         setErrorMessages(prev => ({
           ...prev,
           image: 'Image size must be less than 2MB.'
         }));
-  
-        // Do not clear the current image or preview
+
         setImage(null);
         setPreview(prev => prev || defaultImage);
-  
-        // Hide the error message after 3 seconds
+
         setTimeout(() => {
           setErrorMessages(prev => ({ ...prev, image: '' }));
         }, 3000);
-  
+
         return;
       }
-  
+
       setErrorMessages(prev => ({ ...prev, image: '' }));
       setImage(file);
-  
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result);
@@ -119,13 +115,12 @@ function EditProfile() {
       reader.readAsDataURL(file);
     }
   };
+
   const handleSave = async (event) => {
     event.preventDefault();
-    
-    // Initialize formData at the beginning
+
     const formData = new FormData();
-  
-    // Reset error messages
+
     setErrorMessages({
       name: '',
       email: '',
@@ -134,65 +129,61 @@ function EditProfile() {
       image: '',
       general: '',
     });
-  
+
     let hasErrors = false;
-  
-    // Validate fields and set error messages
+
     if (!name.trim()) {
       setErrorMessages(prev => ({ ...prev, name: 'Name is required.' }));
       hasErrors = true;
     } else {
       formData.append('name', name);
     }
-  
+
     if (!email.trim()) {
       setErrorMessages(prev => ({ ...prev, email: 'Email is required.' }));
       hasErrors = true;
     } else {
       formData.append('email', email);
     }
-  
+
     if (!phone.trim()) {
       setErrorMessages(prev => ({ ...prev, phone: 'Phone number is required.' }));
       hasErrors = true;
     } else {
-      formData.append('phone', phone);
+      formData.append('phone', phonePrefix + phone);
     }
-  
-    // Only append password if it's not empty
+console.log( phonePrefix + phone)
     if (password.trim()) {
       formData.append('password', password);
     }
-  
-    // Check if there are image errors (if any)
+
     if (errorMessages.image) {
       hasErrors = true;
     }
-  
+
     if (hasErrors) {
       setSuccess(null);
       return;
     }
-  
-    // Append image if the user selected one
+
     if (image) {
       formData.append('img', image);
     }
-  
+
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:8080/users/${userId}`, {
+      const response = await fetch(`https://backend-934694036821.europe-west1.run.app/users/${userId}`, {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
         },
         body: formData,
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         console.error('Backend errors:', errorData);
-  
+
         const newErrors = {
           name: errorData.error?.name || '',
           email: errorData.error?.email || '',
@@ -201,15 +192,15 @@ function EditProfile() {
           image: '',
           general: '',
         };
-  
+
         if (response.status === 409 && errorData.error === 'Email already exists, try something else') {
           newErrors.email = 'Email already exists, try something else.';
         }
-  
+
         setErrorMessages(newErrors);
         throw new Error('Failed to update profile');
       }
-  
+
       setSuccess('Profile updated successfully');
       setTimeout(() => setSuccess(null), 2000); // Hide success message after 2 seconds
     } catch (error) {
@@ -219,17 +210,11 @@ function EditProfile() {
       setLoading(false);
     }
   };
-  
-  
-  
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   const handleImageError = (e) => {
     e.target.src = defaultImage;
   };
+
   return (
     <div className="profile-container">
       <div className="profile-image-container">
@@ -242,12 +227,9 @@ function EditProfile() {
         <img
           src={preview}
           alt={name}
-<<<<<<< HEAD
           className={`profile-image ${!preview ? 'no-image' : defaultImage}`}
-=======
-          className={`profile-image ${!preview ? 'no-image' : ''}`}
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
           onError={handleImageError}
+            
           onClick={() => imageRef.current?.click()}
         />
         {errorMessages.image && (
@@ -270,28 +252,31 @@ function EditProfile() {
               <div className="error-message">{errorMessages.name}</div>
             )}
           </div>
-         <div className={`form-group ${errorMessages.email ? 'error' : ''}`}>
-  <label htmlFor="email">Email</label>
-  <input
-    type="email"
-    id="email"
-    value={email}
-    onChange={(e) => setEmail(e.target.value)}
-    style={{ borderColor: errorMessages.email ? 'red' : '' }}
-  />
-  {errorMessages.email && (
-    <div className="error-message">{errorMessages.email}</div>
-  )}
-</div>
+          <div className={`form-group ${errorMessages.email ? 'error' : ''}`}>
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              style={{ borderColor: errorMessages.email ? 'red' : '' }}
+            />
+            {errorMessages.email && (
+              <div className="error-message">{errorMessages.email}</div>
+            )}
+          </div>
           <div className={`form-group ${errorMessages.phone ? 'error' : ''}`}>
             <label htmlFor="phone">Phone</label>
-            <input
-              type="text"
-              id="phone"
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-              style={{ borderColor: errorMessages.phone ? 'red' : '' }}
-            />
+            <div className="phone-input-container">
+              <span className="phone-prefix">{phonePrefix}</span>
+              <input
+                type="text"
+                placeholder="Phone Number  21234567.."
+                value={phone}
+                onChange={(event) => setPhone(event.target.value)}
+                maxLength={8}
+              />
+            </div>
             {errorMessages.phone && (
               <div className="error-message">{errorMessages.phone}</div>
             )}
@@ -309,13 +294,17 @@ function EditProfile() {
               <div className="error-message">{errorMessages.password}</div>
             )}
           </div>
-          <button type="submit" disabled={loading}>Save Changes</button>
-          {success && <div className="success-message">{success}</div>}
+          <div className="form-group">
+            <button type="submit" disabled={loading}>Save</button>
+          </div>
+          
+          {success && (
+            <div className="success-message">{success}</div>
+          )}
         </form>
       </div>
     </div>
   );
-  
 }
 
 export default EditProfile;

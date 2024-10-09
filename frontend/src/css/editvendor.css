@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .vendor-container {
   display: flex;
   justify-content: center; /* Center horizontally */
@@ -18,29 +17,6 @@
   max-width: 900px; /* Set a maximum width for larger screens */
   margin: auto; /* Center horizontally */
 }
-=======
-/* editvendor.css */
-
-.page-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-  background-color: #E5F2F7; /* Ensure this is the intended background color */
-  }
-  
-  .edit-vendor-container {
-    display: flex;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
-    width: 90%; /* Ensure it does not exceed viewport width */
-    max-width: 900px; /* Set a maximum width for larger screens */
-  }
-  
-  
->>>>>>> d27b46be5e9dd1ccbadff4044dcca4c39a7d905c
   
   .vendor-image {
     width: 100%;
