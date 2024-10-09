@@ -1,0 +1,19 @@
+steps:
+  - name: 'gcr.io/k8s-skaffold/pack'
+    args:
+      - build
+      - --builder
+      - gcr.io/k8s-skaffold/pack
+      - --buildpack
+      - pack.yaml
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['app', 'deploy', '--region=europe-west1', '--platform=managed']
+
+options:
+  machineType: 'N1_HIGHCPU_8'
+  logging: 'CLOUD_LOGGING_ONLY'
+
+artifacts:
+  objects:
+    location: 'gs://vendorsstore/'
+    paths: ['build/**']

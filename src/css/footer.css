@@ -1,0 +1,143 @@
+/* src/css/footer.css */
+
+.footer {
+  background-color: #3a9c9f;
+  padding: 20px;
+  color: white;
+  text-align: center;
+  margin-top: 50px; /* Add a margin to the top of the footer */
+}
+
+.footer-description {
+  margin-bottom: 20px;
+  font-size: 18px;
+}
+
+.footer-icons {
+  display: flex;
+  justify-content: center;
+  gap: 80px;
+}
+
+.footer-icon {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.footer-icon a {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  color: white;
+  text-decoration: none;
+}
+
+.footer-icon:hover a {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footer-icon:hover {
+  transform: scale(1.1);
+}
+
+/* Media queries for responsiveness */
+
+/* For screens smaller than 768px (tablets and mobile devices) */
+@media only screen and (max-width: 768px) {
+  .footer {
+    padding: 15px; /* Reduce padding on smaller screens */
+  }
+  .footer-description {
+    font-size: 16px; /* Reduce font size on smaller screens */
+  }
+  .footer-icons {
+    gap: 20px; /* Reduce gap between icons on smaller screens */
+  }
+  .footer-icon {
+    flex-direction: row; /* Change icon layout to horizontal on smaller screens */
+  }
+}
+
+/* For screens smaller than 480px (mobile devices) */
+@media only screen and (max-width: 480px) {
+  .footer {
+    padding: 10px; /* Reduce padding even further on very small screens */
+  }
+  .footer-description {
+    font-size: 14px; /* Reduce font size even further on very small screens */
+  }
+  .footer-icons {
+    gap: 10px; /* Reduce gap between icons even further on very small screens */
+  }
+}
+
+
+.footer-icon {
+  display: inline-flex; /* Add this to ensure the icon remains visible */
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  transition: transform 0.3s ease;
+}
+
+.footer-icon a {
+  /* Remove opacity: 0; to see if the icon link is visible by default */
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  color: white;
+  text-decoration: none;
+}
+.footer-icon {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  transition: transform 0.3s ease;
+  flex-basis: 0; /* Add this to restrict icon width */
+  max-width: 24px; /* Adjust the width as needed */
+  margin: 0; /* Reset margin */
+  padding: 0; /* Reset padding */
+}
+
+.footer-icon a {
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  color: white;
+  text-decoration: none;
+}
+
+/* Media queries for responsiveness */
+
+/* For screens smaller than 768px (tablets and mobile devices) */
+@media only screen and (max-width: 768px) {
+  .footer {
+    padding: 15px; /* Reduce padding on smaller screens */
+  }
+  .footer-description {
+    font-size: 16px; /* Reduce font size on smaller screens */
+  }
+  .footer-icons {
+    gap: 20px; /* Reduce gap between icons on smaller screens */
+  }
+  .footer-icon {
+    flex-direction: row; /* Change icon layout to horizontal on smaller screens */
+  }
+}
+
+/* For screens smaller than 480px (mobile devices) */
+@media only screen and (max-width: 480px) {
+  .footer {
+    padding: 10px; /* Reduce padding even further on very small screens */
+  }
+  .footer-description {
+    font-size: 14px; /* Reduce font size even further on very small screens */
+  }
+  .footer-icons {
+    gap: 10px; /* Reduce gap between icons even further on very small screens */
+  }
+}

@@ -1,0 +1,516 @@
+.navbar {
+    background: rgba(229, 242, 247, 0.9);
+    padding: 1rem 2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+    backdrop-filter: blur(0);
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 1000;
+    width: calc(100% - 4rem);
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.navbar.transparent {
+    background: transparent;
+    box-shadow: none;
+    backdrop-filter: blur(10px);
+}
+
+.navbar.no-scroll {
+    background: transparent;
+    box-shadow: none;
+}
+.navbar .logo img {
+    width: 50px; /* Increase width to make it more prominent */
+    height: 50px; /* Increase height to maintain aspect ratio */
+    border-radius: 50%; /* Circular logo */
+    object-fit: cover; /* Cover the container */
+    display: block; /* Display block for padding */
+    margin-right: 15px; /* Increase space between logo and links */
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+    position: relative; /* Position for hover effects */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Add a subtle shadow */
+  }
+  
+  .navbar .logo img:hover {
+    transform: scale(1.2); /* Increase scale effect on hover */
+    filter: brightness(1.2) saturate(1.3) contrast(1.2); /* Brighten and saturate on hover */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
+  }
+  
+  .navbar .logo:hover {
+    transform: scale(1.1    );
+  }
+  .navbar .logo img {
+    /* ... existing styles ... */
+    animation: logo-pulse 3s infinite; /* Add animation */
+  }
+  
+  @keyframes logo-pulse {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  .vendor-image img {
+    width: 100%; /* Fill the container */
+    height: 100%; /* Fill the container */
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  
+  .vendor-image:hover img {
+    transform: scale(1.2);
+    filter: brightness(1.1) saturate(1.2) contrast(1.1);
+  }
+  
+  .vendor-image:hover {
+    transform: scale(1.2);
+  }
+
+.navbar.no-scroll {
+    background: transparent; /* Fully transparent background when no scrolling */
+    box-shadow: none; /* No shadow when no scrolling */
+}
+
+.navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navbar .center-links {
+    display: flex;
+    justify-content: center; /* Center the links */
+    flex: 1; /* Allow this section to take up available space */
+}
+
+.navbar .end-links {
+    display: flex;
+    gap: 1rem; /* Space between end links */
+}
+
+.navbar li {
+    margin-right: 1rem; /* Space between list items */
+}
+
+.navbar a, .navbar button {
+    color: #333; /* Text color */
+    text-decoration: none; /* No underline */
+    font-size: 1rem; /* Font size */
+    font-weight: 500; /* Font weight */
+    position: relative; /* Position for before/after pseudo-elements */
+    transition: color 0.3s ease; /* Smooth color transition */
+}
+
+.navbar a::before, .navbar button::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 2px;
+    background-color: #E5F2F7; /* Underline color */
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    transform-origin: bottom right; /* Origin point for animation */
+}
+
+.navbar a:hover::before, .navbar button::before {
+    transform: scaleX(1); /* Animate underline on hover */
+    transform-origin: bottom left; /* Change origin on hover */
+}
+
+.navbar a:hover, .navbar button:hover {
+    color: #4db8e5; /* Change color on hover */
+}
+
+.navbar button {
+    background: transparent; /* No background for button */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer cursor */
+    padding: 0; /* No padding */
+}
+
+.navbar a {
+    padding: 0.5rem 0; /* Vertical padding for links */
+    display: inline-block; /* Display block for padding */
+}
+
+.navbar button {
+    padding: 0.5rem; /* Padding for button */
+}
+
+.navbar a, .navbar button {
+    transition: transform 0.3s ease; /* Smooth transform on hover */
+}
+
+.navbar a:hover, .navbar button:hover {
+    transform: translateY(-3px); /* Slight lift effect on hover */
+}
+
+.navbar a::after, .navbar button::after {
+    content: '';
+    position: absolute;
+    bottom: -3px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: rgba(0, 0, 0, 0.1); /* Underline color */
+    transform: scaleX(0);
+    transform-origin: bottom right; /* Origin for animation */
+    transition: transform 0.3s ease;
+}
+
+.navbar a:hover::after, .navbar button:hover::after {
+    transform: scaleX(1); /* Animate underline on hover */
+    transform-origin: bottom left; /* Change origin on hover */
+}
+
+.navbar-profile-image {
+    width: 30px; /* Profile image width */
+    height: 30px; /* Profile image height */
+    border-radius: 50%; /* Circular profile image */
+    object-fit: cover; /* Cover for profile image */
+    cursor: pointer; /* Pointer cursor */
+}
+.cart-dropdown {
+    position: absolute;
+    top: 100%; /* Move the dropdown below the navbar */
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 15px; /* Increased padding for a bigger cart */
+    width: 400px; /* Increased width for a bigger cart */
+    z-index: 1;
+}
+
+.cart-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column; /* Make the list items stack vertically */
+}
+.cart-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    width: 100%; /* Ensure it uses the full width available */
+    flex-wrap: wrap; /* Allow content to wrap to a new line if necessary */
+    justify-content: space-between; /* Space out the content */
+}
+.cart-item-img {
+    flex-shrink: 0;
+    margin-right: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+    position: relative;
+    width: 70px; /* Added width to maintain aspect ratio */
+    height: 70px; /* Added height to maintain aspect ratio */
+  }
+  
+  .cart-item-img img {
+    width: 100%; /* Fill the container */
+    height: 100%; /* Fill the container */
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+  
+  .cart-item-img:hover img {
+    transform: scale(1.2);
+    filter: brightness(1.1) saturate(1.2) contrast(1.1);
+  }
+  
+  .cart-item-img:hover{
+    transform: scale(1.2);
+  }
+
+
+/* Cart item name */
+.cart-item-name {
+    flex: 1;
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 10px;
+    min-width: 120px; /* Ensure the name doesn't collapse on smaller screens */
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden; /* Hide overflow text */
+    text-overflow: ellipsis; /* Add ellipsis for overflow */
+}
+.cart-item-quantity {
+    margin-left: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #666;
+    margin-top: 5px;
+    min-width: 120px;
+    flex: 1;
+    justify-content: center;
+    padding: 0 10px; /* Add padding to the container */
+}
+
+.cart-item-quantity button {
+    font-size: 14px;
+    border: 1px solid #ddd;
+    background-color: #f0f0f0;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.1s ease;
+}
+
+.cart-item-quantity span {
+    margin: 20px 10px; /* Reduce margin around the quantity text */
+    font-size: 14px;
+    text-align: center;
+   
+    align-items: center;
+    justify-content: center;
+}
+/* Remove button aligned with quantity space */
+.navbar .cart-dropdown .removebutton {
+    margin-right: 10px;
+    background-color: #e74c3c; /* A red color for the button */
+    color: #fff; /* White text color */
+    border: none; /* Remove default border */
+    border-radius: 4px; /* Rounded corners */
+    padding: 5px 10px; /* Padding inside the button */
+    cursor: pointer; /* Pointer cursor on hover */
+    font-size: 12px; /* Adjusted font size to fit better */
+    margin-left: auto; /* Push it to the right */
+    white-space: nowrap; /* Prevent text from wrapping */
+    flex-shrink: 0; /* Prevent it from shrinking */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+    width: 120px; /* Set width to match the quantity space */
+    text-align: center; /* Center the text inside the button */
+    display: flex;
+    align-items: center; /* Vertically center the button text */
+    justify-content: center; /* Horizontally center the button text */
+}
+
+.navbar .cart-dropdown .removebutton:hover {
+    background-color: #c0392b; /* Darker red color on hover */
+}
+
+.navbar .cart-dropdown .removebutton:disabled {
+    background-color: #95a5a6; /* Grey color for disabled state */
+    cursor: not-allowed; /* Not-allowed cursor */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .cart-item {
+        flex-direction: column; /* Stack items vertically on smaller screens */
+        align-items: flex-start; /* Align items to the left */
+    }
+
+    .cart-item-name {
+        font-size: 14px; /* Smaller font size */
+        width: 100%; /* Make it take full width */
+        margin-bottom: 5px; /* Add a margin below for spacing */
+    }
+
+    .cart-item-quantity {
+        width: 100%; /* Full width for quantity section */
+        justify-content: flex-start; /* Align items to the left */
+    }
+
+    .cart-item-quantity button {
+        padding: 5px; /* Adjust button padding */
+        font-size: 12px; /* Adjust font size */
+    }
+
+    .navbar .cart-dropdown .removebutton {
+        font-size: 12px; /* Adjust font size for smaller screens */
+        padding: 5px 8px; /* Adjust padding */
+        width: 100%; /* Ensure it's full width in smaller screens */
+    }
+}
+
+@media (max-width: 480px) {
+    .cart-item-name {
+        font-size: 12px; /* Smaller font size */
+    }
+
+
+    .navbar .cart-dropdown .removebutton {
+        font-size: 10px; /* Smaller font size for remove button */
+        padding: 4px 6px; /* Smaller padding */
+        width: 100%; /* Ensure full width on very small screens */
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+    .navbar {
+      padding: 1rem 1.5rem;
+    }
+    .navbar .logo img {
+      width: 40px; /* Adjust logo size as needed */
+    }
+    .navbar a, .navbar button {
+      font-size: 0.9rem; /* Font size */
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .navbar {
+      padding: 1rem 1rem;
+    }
+    .navbar .logo img {
+      width: 35px; /* Adjust logo size as needed */
+    }
+    .navbar a, .navbar button {
+      font-size: 0.8rem; /* Font size */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .navbar {
+      padding: 0.5rem 1rem;
+    }
+    .navbar .logo img {
+      width: 30px; /* Adjust logo size as needed */
+    }
+    .navbar a, .navbar button {
+      font-size: 0.7rem; /* Font size */
+    }
+    .navbar .center-links {
+      display: none; /* Hide center links on smaller screens */
+    }
+    .navbar .end-links {
+      gap: 0.5rem; /* Reduce gap between end links */
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .navbar {
+      padding: 0.5rem 0.5rem;
+    }
+    .navbar .logo img {
+      width: 25px; /* Adjust logo size as needed */
+    }
+    .navbar a, .navbar button {
+      font-size: 0.6rem; /* Font size */
+    }
+    .navbar .end-links {
+      gap: 0.2rem; /* Reduce gap between end links */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .navbar {
+      padding: 0.2rem 0.2rem;
+    }
+    .navbar .logo img {
+      width: 20px; /* Adjust logo size as needed */
+    }
+    .navbar a, .navbar button {
+      font-size: 0.5rem; /* Font size */
+    }
+    .navbar .end-links {
+      gap: 0.1rem; /* Reduce gap between end links */
+    }
+  }
+  
+  /* Cart dropdown responsive adjustments */
+  @media (max-width: 768px) {
+    .cart-dropdown {
+      width: 300px; /* Adjust width for smaller screens */
+    }
+    .cart-item {
+      padding: 5px; /* Reduce padding */
+    }
+    .cart-item-name {
+      font-size: 12px; /* Smaller font size */
+    }
+    .cart-item-quantity {
+      font-size: 12px; /* Smaller font size */
+    }
+    .cart-item-quantity button {
+      padding: 3px; /* Reduce padding */
+      font-size: 10px; /* Smaller font size */
+    }
+    .navbar .cart-dropdown .removebutton {
+      font-size: 10px; /* Smaller font size for remove button */
+      padding: 3px 5px; /* Smaller padding */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .cart-dropdown {
+      width: 250px; /* Adjust width for very small screens */
+    }
+    .cart-item {
+      padding: 3px; /* Reduce padding */
+    }
+    .cart-item-name {
+      font-size: 10px; /* Smaller font size */
+    }
+    .cart-item-quantity {
+      font-size: 10px; /* Smaller font size */
+    }
+    .cart-item-quantity button {
+      padding: 2px; /* Reduce padding */
+      font-size: 9px; /* Smaller font size */
+    }
+    .navbar .cart-dropdown .removebutton {
+      font-size: 9px; /* Smaller font size for remove button */
+      padding: 2px 4px; /* Smaller padding */
+    }
+  }
+
+/* Responsive adjustments for logo */
+@media (max-width: 1200px) {
+  .navbar .logo img {
+    width: 40px; /* Scale down width */
+    height: 40px; /* Scale down height */
+  }
+}
+
+@media (max-width: 992px) {
+  .navbar .logo img {
+    width: 35px; /* Scale down width */
+    height: 35px; /* Scale down height */
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar .logo img {
+    width: 30px; /* Scale down width */
+    height: 30px; /* Scale down height */
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar .logo img {
+    width: 25px; /* Scale down width */
+    height: 25px; /* Scale down height */
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar .logo img {
+    width: 20px; /* Scale down width */
+    height: 20px; /* Scale down height */
+  }
+}

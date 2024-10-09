@@ -1,0 +1,5 @@
+packs:
+  - builder: gcr.io/k8s-skaffold/pack
+    buildpacks:
+      - gcr.io/paketo-buildpacks/nodejs
+      - gcr.io/paketo-buildpacks/react

@@ -1,0 +1,138 @@
+/* src/css/Sidebar.css */
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px; /* Start hidden off-screen */
+    width: 250px;
+    height: 100%;
+    background-color: #E5F2F7;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 1000; /* Ensure it is below the toggle button */
+}
+
+.sidebar.open {
+    left: 0; /* Slide into view */
+}
+
+.sidebar-content {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin-bottom: 15px;
+}
+
+.sidebar a {
+    color: #333;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 500;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.sidebar a:hover {
+    color: #007BFF;
+}
+
+.sidebar-toggle {
+    position: fixed;
+    top: 10px;
+    left: 10px; /* Position icon to the left side */
+    width: 60px; /* Increase width to ensure it's clickable */
+    height: 60px; /* Increase height to ensure it's clickable */
+    background-color: #fff; /* Add a white background */
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    color: #4db8e5;
+    transition: opacity 0.3s ease-in-out, color 0.3s ease-in-out, transform 0.3s ease-in-out;
+    display: flex;
+    align-items: center; /* Center icon vertically */
+    justify-content: center; /* Center icon horizontally */
+    z-index: 1100; /* Ensure it is above the sidebar */
+  }
+  
+  .sidebar.open .sidebar-toggle {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(250px);
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  }
+  
+  .sidebar-toggle-icon {
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .sidebar.open .sidebar-toggle-icon {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease-in-out;
+  }
+
+.sidebar.open .sidebar-toggle {
+    opacity: 0;
+    pointer-events: none;
+  }
+.sidebar-toggle:hover {
+    color: #0056b3; /* Change color on hover */
+    background-color: #f7f7f7; /* Add a light gray background on hover */
+}
+
+.sidebar.open .sidebar-toggle {
+    display: none; /* Hide the button when sidebar is open */
+}
+
+/* Media queries for responsiveness */
+/* For screens smaller than 768px (tablets and mobile devices) */
+@media only screen and (max-width: 768px) {
+    .sidebar {
+      width: 200px; /* Reduce width on smaller screens */
+      top: 60px; /* Move the sidebar below the navbar */
+    }
+    .sidebar-content {
+      padding: 15px; /* Reduce padding on smaller screens */
+    }
+    .sidebar li {
+      margin-bottom: 10px; /* Reduce margin between list items on smaller screens */
+    }
+    .sidebar a {
+      font-size: 16px; /* Reduce font size on smaller screens */
+    }
+    .sidebar-toggle {
+      width: 40px; /* Reduce width of toggle button on smaller screens */
+      height: 40px; /* Reduce height of toggle button on smaller screens */
+      font-size: 20px; /* Reduce font size of toggle button on smaller screens */
+    }
+  }
+  
+  /* For screens smaller than 480px (mobile devices) */
+  @media only screen and (max-width: 480px) {
+    .sidebar {
+      width: 150px; /* Reduce width even further on very small screens */
+      top: 60px; /* Move the sidebar below the navbar */
+    }
+    .sidebar-content {
+      padding: 10px; /* Reduce padding even further on very small screens */
+    }
+    .sidebar li {
+      margin-bottom: 5px; /* Reduce margin between list items even further on very small screens */
+    }
+    .sidebar a {
+      font-size: 14px; /* Reduce font size even further on very small screens */
+    }
+    .sidebar-toggle {
+      width: 30px; /* Reduce width of toggle button even further on very small screens */
+      height: 30px; /* Reduce height of toggle button even further on very small screens */
+      font-size: 18px; /* Reduce font size of toggle button even further on very small screens */
+    }
+  }
